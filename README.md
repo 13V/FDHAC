@@ -101,11 +101,18 @@ The site is static and deploys to Vercel with no adapter. `vercel.json` handles:
   `/price-list`.
 - **301 redirects** from older URLs (for example `/general-information/maintenance-tips`) to the new pages.
 - **Long-lived caching** for the fingerprinted files in `/_astro/`, plus basic security headers.
+- **`noindex` on `*.vercel.app` addresses**, so the staging copy stays out of Google. The real domain isn't affected.
 
-The Vercel project is connected to this GitHub repo, so **every push deploys automatically**. Pushes to the production
-branch go live, and any other branch gets its own preview URL. The production branch is set under Vercel → Project →
-Settings → Git. It's currently `claude/ecstatic-wright-8v5jzu`, the repo's default branch. If you create a `main`
-branch, switch it there.
+**Vercel project:** `fdhac`, live at https://fdhac.vercel.app.
+
+**Auto-deploys:** connect this repo under Vercel → `fdhac` → Settings → Git → *Connect Git Repository* (GitHub →
+`13V/FDHAC`). After that, pushes to the production branch go live and other branches get preview URLs. The
+production branch defaults to the repo's default branch, currently `claude/ecstatic-wright-8v5jzu`. If you create a
+`main` branch, switch it there. Until the repo is connected, deploy from the command line:
+
+```bash
+npx vercel deploy --prod
+```
 
 To go live on the real domain:
 
