@@ -1,0 +1,348 @@
+---
+/**
+ * Quote request form.
+ * Delivery is set in src/data/site.ts → quoteForm.provider:
+ *   mailto   – opens the visitor's email app with the request filled in (default, no setup)
+ *   netlify  – Netlify Forms
+ *   endpoint – POST to a form service (Formspree, Web3Forms, etc.)
+ */
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+
+interface Props {
+  id: string;
+  compact?: boolean;
+}
+const { id, compact = false } = Astro.props;
+const { provider, endpoint } = site.quoteForm;
+
+const action =
+  provider === 'endpoint' && endpoint ? endpoint : provider === 'netlify' ? '/thank-you' : `mailto:${site.email}`;
+
+const needs = ['New ducted system', 'Replace an old ducted system', 'Split system', 'Not sure yet'];
+---
+
+<form
+  class:list={['qform', { 'qform--compact': compact }]}
+  id={id}
+  method="post"
+  action={action}
+  enctype={provider === 'mailto' ? 'text/plain' : undefined}
+  name={provider === 'netlify' ? 'quote' : undefined}
+  data-netlify={provider === 'netlify' ? 'true' : undefined}
+  netlify-honeypot={provider === 'netlify' ? 'company' : undefined}
+  data-quote-form
+  data-provider={provider}
+  data-email={site.email}
+  data-phone={site.phone.display}
+  novalidate
+>
+  {provider === 'netlify' && <input type="hidden" name="form-name" value="quote" />}
+  <p class="qform__hp" aria-hidden="true">
+    <label>Leave this empty <input name="company" tabindex="-1" autocomplete="off" /></label>
+  </p>
+
+  {
+    compact ? (
+      <div class="field">
+        <label for={`${id}-need`}>What do you need?</label>
+        <select class="select" id={`${id}-need`} name="need">
+          {needs.map((n) => (
+            <option>{n}</option>
+          ))}
+        </select>
+      </div>
+    ) : (
+      <fieldset class="field">
+        <legend class="field-label">What can we help with?</legend>
+        <div class="choice-grid">
+          {needs.map((n, i) => (
+            <label class="choice">
+              <input type="radio" name="need" value={n} checked={i === 0} />
+              <span>{n}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    )
+  }
+
+  <div class="qform__row">
+    <div class="field">
+      <label for={`${id}-name`}>Your name</label>
+      <input class="input" id={`${id}-name`} name="name" autocomplete="name" required aria-describedby={`${id}-name-err`} />
+      <p class="field-error" id={`${id}-name-err`} hidden>Please tell us your name.</p>
+    </div>
+    <div class="field">
+      <label for={`${id}-phone`}>Phone</label>
+      <input
+        class="input"
+        id={`${id}-phone`}
+        name="phone"
+        type="tel"
+        inputmode="tel"
+        autocomplete="tel"
+        required
+        aria-describedby={`${id}-phone-err`}
+      />
+      <p class="field-error" id={`${id}-phone-err`} hidden>Please enter a phone number we can call you on.</p>
+    </div>
+  </div>
+
+  <div class="qform__row">
+    <div class="field">
+      <label for={`${id}-suburb`}>Suburb</label>
+      <input
+        class="input"
+        id={`${id}-suburb`}
+        name="suburb"
+        autocomplete="address-level2"
+        required
+        aria-describedby={`${id}-suburb-err`}
+      />
+      <p class="field-error" id={`${id}-suburb-err`} hidden>Please tell us your suburb.</p>
+    </div>
+    {
+      !compact && (
+        <div class="field">
+          <label for={`${id}-email`}>
+            Email <span class="opt">(optional)</span>
+          </label>
+          <input class="input" id={`${id}-email`} name="email" type="email" autocomplete="email" aria-describedby={`${id}-email-err`} />
+          <p class="field-error" id={`${id}-email-err`} hidden>
+            That email address doesn’t look right.
+          </p>
+        </div>
+      )
+    }
+  </div>
+
+  {
+    !compact && (
+      <div class="qform__row">
+        <div class="field">
+          <label for={`${id}-size`}>
+            Home size <span class="opt">(optional)</span>
+          </label>
+          <select class="select" id={`${id}-size`} name="home">
+            <option value="">Choose…</option>
+            <option>1–2 bedrooms</option>
+            <option>3 bedrooms</option>
+            <option>4 bedrooms</option>
+            <option>5+ bedrooms</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for={`${id}-time`}>
+            Best time to call <span class="opt">(optional)</span>
+          </label>
+          <select class="select" id={`${id}-time`} name="time">
+            <option value="">Any time</option>
+            <option>Morning</option>
+            <option>Afternoon</option>
+            <option>Evening</option>
+          </select>
+        </div>
+      </div>
+    )
+  }
+
+  {
+    !compact && (
+      <div class="field">
+        <label for={`${id}-msg`}>
+          Anything else we should know? <span class="opt">(optional)</span>
+        </label>
+        <textarea
+          class="textarea"
+          id={`${id}-msg`}
+          name="message"
+          rows="4"
+          placeholder="For example: single or double storey, age of your current system, rooms you want included."
+        />
+      </div>
+    )
+  }
+
+  <button class="btn btn--primary btn--arrow btn--block qform__submit" type="submit">
+    {compact ? 'Get my free quote' : 'Send my quote request'}
+    <span class="btn__circle"><Icon name="arrow-up-right" /></span>
+  </button>
+  <p class="fine qform__note">
+    {compact ? 'No obligation. We’ll call you back to book a free site inspection.' : 'We’ll only use your details to reply to your enquiry.'}
+  </p>
+  <div class="qform__status" role="status" aria-live="polite" tabindex="-1" hidden></div>
+</form>
+
+<style>
+  .qform {
+    display: grid;
+    gap: 16px;
+  }
+  .qform fieldset {
+    border: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .qform legend {
+    margin-bottom: 8px;
+  }
+  .qform__row {
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 560px) {
+    .qform__row {
+      grid-template-columns: 1fr 1fr;
+    }
+    .qform__row > .field:only-child {
+      grid-column: 1 / -1;
+    }
+  }
+  .qform--compact {
+    gap: 12px;
+  }
+  .qform--compact .qform__row {
+    gap: 12px;
+  }
+  .qform__submit {
+    justify-content: space-between;
+    padding-left: 1.6rem;
+    margin-top: 4px;
+  }
+  .qform__hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .qform__note {
+    text-align: center;
+  }
+  .qform__status {
+    padding: 16px 18px;
+    border-radius: var(--radius-sm);
+    background: var(--blue-50);
+    border: 1px solid var(--blue-100);
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .qform__status[data-tone='error'] {
+    background: #fdecea;
+    border-color: #f5c2bc;
+  }
+  .qform__status:focus {
+    outline: 3px solid var(--blue-500);
+    outline-offset: 3px;
+  }
+  .qform__status a {
+    color: var(--blue-600);
+    font-weight: 700;
+  }
+</style>
+
+<script>
+  const digits = (v: string) => v.replace(/\D/g, '');
+
+  document.querySelectorAll<HTMLFormElement>('[data-quote-form]').forEach((form) => {
+    const provider = form.dataset.provider;
+    const email = form.dataset.email ?? '';
+    const phone = form.dataset.phone ?? '';
+    const status = form.querySelector<HTMLElement>('.qform__status');
+
+    const setError = (input: HTMLInputElement, invalid: boolean) => {
+      const field = input.closest<HTMLElement>('.field');
+      const msg = field?.querySelector<HTMLElement>('.field-error');
+      if (invalid) {
+        field?.setAttribute('data-invalid', '');
+        input.setAttribute('aria-invalid', 'true');
+      } else {
+        field?.removeAttribute('data-invalid');
+        input.removeAttribute('aria-invalid');
+      }
+      if (msg) msg.hidden = !invalid;
+    };
+
+    const check = (input: HTMLInputElement) => {
+      const v = input.value.trim();
+      let invalid = false;
+      if (input.required && !v) invalid = true;
+      if (input.type === 'tel' && v && (digits(v).length < 8 || digits(v).length > 12)) invalid = true;
+      if (input.type === 'email' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) invalid = true;
+      setError(input, invalid);
+      return !invalid;
+    };
+
+    const inputs = Array.from(form.querySelectorAll<HTMLInputElement>('input.input'));
+    inputs.forEach((input) => {
+      input.addEventListener('blur', () => input.value && check(input));
+      input.addEventListener('input', () => input.getAttribute('aria-invalid') && check(input));
+    });
+
+    const show = (html: string, tone: 'ok' | 'error' = 'ok') => {
+      if (!status) return;
+      status.innerHTML = html;
+      status.dataset.tone = tone;
+      status.hidden = false;
+      status.focus();
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const firstInvalid = inputs.find((i) => !check(i));
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return;
+      }
+
+      const data = new FormData(form);
+      if (data.get('company')) return; // spam trap
+      const get = (k: string) => String(data.get(k) ?? '').trim();
+      const tel = `tel:+61${digits(phone).replace(/^0/, '')}`;
+
+      if (provider === 'mailto') {
+        const lines = [
+          `Enquiry: ${get('need')}`,
+          `Name: ${get('name')}`,
+          `Phone: ${get('phone')}`,
+          `Suburb: ${get('suburb')}`,
+          get('email') && `Email: ${get('email')}`,
+          get('home') && `Home size: ${get('home')}`,
+          get('time') && `Best time to call: ${get('time')}`,
+          get('message') && `\n${get('message')}`,
+        ].filter(Boolean);
+        const subject = `Quote request: ${get('need')} (${get('suburb')})`;
+        window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+        show(
+          `Nearly done. Your email app should have opened with your request ready to go, so just press send. Nothing opened? Email <a href="mailto:${email}">${email}</a> or call <a href="${tel}">${phone}</a>.`,
+        );
+        return;
+      }
+
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      button?.setAttribute('disabled', '');
+      try {
+        const res =
+          provider === 'netlify'
+            ? await fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
+              })
+            : await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        show(`Thanks, we’ve got your request and will be in touch soon. Need us sooner? Call <a href="${tel}">${phone}</a>.`);
+      } catch {
+        show(
+          `Sorry, your request didn’t send. Please call <a href="${tel}">${phone}</a> or email <a href="mailto:${email}">${email}</a>.`,
+          'error',
+        );
+      } finally {
+        button?.removeAttribute('disabled');
+      }
+    });
+  });
+</script>

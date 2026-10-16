@@ -1,0 +1,143 @@
+---
+import '@fontsource-variable/plus-jakarta-sans';
+import '@fontsource/barlow-condensed/latin-600.css';
+import '@fontsource/barlow-condensed/latin-600-italic.css';
+import '@fontsource/barlow-condensed/latin-700.css';
+import '../styles/global.css';
+import jakartaLatin from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
+import barlowLatin from '@fontsource/barlow-condensed/files/barlow-condensed-latin-600-normal.woff2?url';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CallBar from '../components/CallBar.astro';
+import { site } from '../data/site';
+
+export type Crumb = { label: string; href: string };
+
+interface Props {
+  /** Page title. The brand name is appended unless `fullTitle` is set. */
+  title: string;
+  fullTitle?: boolean;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  breadcrumbs?: Crumb[];
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { title, fullTitle = false, description, image = '/og-image.png', noindex = false, breadcrumbs, schema } = Astro.props;
+
+const pageTitle = fullTitle ? title : `${title} | ${site.shortName}`;
+const cleanPath = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/').replace(/(.)\/$/, '$1');
+const canonical = new URL(cleanPath || '/', site.url).href;
+const ogImage = new URL(image, site.url).href;
+
+const business = {
+  '@context': 'https://schema.org',
+  '@type': 'HVACBusiness',
+  '@id': `${site.url}/#business`,
+  name: site.name,
+  alternateName: site.shortName,
+  description: site.description,
+  url: `${site.url}/`,
+  telephone: site.phone.e164,
+  email: site.email,
+  logo: `${site.url}/logo.png`,
+  image: ogImage,
+  areaServed: { '@type': 'City', name: 'Adelaide' },
+  address: {
+    '@type': 'PostalAddress',
+    ...(site.address ? { streetAddress: site.address } : {}),
+    addressRegion: 'SA',
+    addressCountry: 'AU',
+  },
+  brand: site.brands.map((name) => ({ '@type': 'Brand', name })),
+  sameAs: [site.facebook],
+};
+
+const crumbSchema = breadcrumbs?.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: c.label,
+        item: new URL(c.href, site.url).href,
+      })),
+    }
+  : null;
+
+const extra = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+const jsonLd = [business, crumbSchema, ...extra].filter(Boolean);
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <link rel="preload" href={jakartaLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={barlowLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#0b1d3a" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_AU" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <CallBar />
+
+    <script>
+      const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window && targets.length) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        targets.forEach((el) => io.observe(el));
+      } else {
+        targets.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  main:focus {
+    outline: none;
+  }
+</style>

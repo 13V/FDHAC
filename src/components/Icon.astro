@@ -1,0 +1,166 @@
+---
+/**
+ * Inline SVG icons (Lucide, ISC licence) plus a Facebook glyph.
+ * Usage: <Icon name="phone" />  — decorative by default; pass `label` to make it meaningful.
+ */
+import i_phone from 'lucide-static/icons/phone.svg?raw';
+import i_mail from 'lucide-static/icons/mail.svg?raw';
+import i_check from 'lucide-static/icons/check.svg?raw';
+import i_arrow_right from 'lucide-static/icons/arrow-right.svg?raw';
+import i_snowflake from 'lucide-static/icons/snowflake.svg?raw';
+import i_sun from 'lucide-static/icons/sun.svg?raw';
+import i_moon from 'lucide-static/icons/moon.svg?raw';
+import i_flame from 'lucide-static/icons/flame.svg?raw';
+import i_thermometer from 'lucide-static/icons/thermometer.svg?raw';
+import i_wrench from 'lucide-static/icons/wrench.svg?raw';
+import i_shield_check from 'lucide-static/icons/shield-check.svg?raw';
+import i_warehouse from 'lucide-static/icons/warehouse.svg?raw';
+import i_ruler from 'lucide-static/icons/ruler.svg?raw';
+import i_clock from 'lucide-static/icons/clock.svg?raw';
+import i_sparkles from 'lucide-static/icons/sparkles.svg?raw';
+import i_quote from 'lucide-static/icons/quote.svg?raw';
+import i_menu from 'lucide-static/icons/menu.svg?raw';
+import i_x from 'lucide-static/icons/x.svg?raw';
+import i_map_pin from 'lucide-static/icons/map-pin.svg?raw';
+import i_chevron_down from 'lucide-static/icons/chevron-down.svg?raw';
+import i_info from 'lucide-static/icons/info.svg?raw';
+import i_triangle_alert from 'lucide-static/icons/triangle-alert.svg?raw';
+import i_package from 'lucide-static/icons/package.svg?raw';
+import i_house from 'lucide-static/icons/house.svg?raw';
+import i_fan from 'lucide-static/icons/fan.svg?raw';
+import i_zap from 'lucide-static/icons/zap.svg?raw';
+import i_calendar_check from 'lucide-static/icons/calendar-check.svg?raw';
+import i_file_text from 'lucide-static/icons/file-text.svg?raw';
+import i_circle_check from 'lucide-static/icons/circle-check.svg?raw';
+import i_list_checks from 'lucide-static/icons/list-checks.svg?raw';
+import i_gauge from 'lucide-static/icons/gauge.svg?raw';
+import i_wind from 'lucide-static/icons/wind.svg?raw';
+import i_trash_2 from 'lucide-static/icons/trash-2.svg?raw';
+import i_message_square_text from 'lucide-static/icons/message-square-text.svg?raw';
+import i_banknote from 'lucide-static/icons/banknote.svg?raw';
+import i_hand_coins from 'lucide-static/icons/hand-coins.svg?raw';
+import i_badge_check from 'lucide-static/icons/badge-check.svg?raw';
+import i_users from 'lucide-static/icons/users.svg?raw';
+import i_power from 'lucide-static/icons/power.svg?raw';
+import i_layers from 'lucide-static/icons/layers.svg?raw';
+import i_thumbs_up from 'lucide-static/icons/thumbs-up.svg?raw';
+import i_circle_help from 'lucide-static/icons/circle-help.svg?raw';
+import i_arrow_up_right from 'lucide-static/icons/arrow-up-right.svg?raw';
+import i_scale from 'lucide-static/icons/scale.svg?raw';
+import i_droplets from 'lucide-static/icons/droplets.svg?raw';
+import i_leaf from 'lucide-static/icons/leaf.svg?raw';
+import i_hammer from 'lucide-static/icons/hammer.svg?raw';
+import i_arrow_down_right from 'lucide-static/icons/arrow-down-right.svg?raw';
+import i_heart_handshake from 'lucide-static/icons/heart-handshake.svg?raw';
+import i_timer from 'lucide-static/icons/timer.svg?raw';
+import i_calendar_days from 'lucide-static/icons/calendar-days.svg?raw';
+import i_thermometer_sun from 'lucide-static/icons/thermometer-sun.svg?raw';
+import i_piggy_bank from 'lucide-static/icons/piggy-bank.svg?raw';
+import i_hard_hat from 'lucide-static/icons/hard-hat.svg?raw';
+import i_clipboard_check from 'lucide-static/icons/clipboard-check.svg?raw';
+import i_shield from 'lucide-static/icons/shield.svg?raw';
+import i_star from 'lucide-static/icons/star.svg?raw';
+import i_recycle from 'lucide-static/icons/recycle.svg?raw';
+import i_refresh_cw from 'lucide-static/icons/refresh-cw.svg?raw';
+import i_circle_arrow_right from 'lucide-static/icons/circle-arrow-right.svg?raw';
+
+const raw: Record<string, string> = {
+  'phone': i_phone,
+  'mail': i_mail,
+  'check': i_check,
+  'arrow-right': i_arrow_right,
+  'snowflake': i_snowflake,
+  'sun': i_sun,
+  'moon': i_moon,
+  'flame': i_flame,
+  'thermometer': i_thermometer,
+  'wrench': i_wrench,
+  'shield-check': i_shield_check,
+  'warehouse': i_warehouse,
+  'ruler': i_ruler,
+  'clock': i_clock,
+  'sparkles': i_sparkles,
+  'quote': i_quote,
+  'menu': i_menu,
+  'x': i_x,
+  'map-pin': i_map_pin,
+  'chevron-down': i_chevron_down,
+  'info': i_info,
+  'triangle-alert': i_triangle_alert,
+  'package': i_package,
+  'house': i_house,
+  'fan': i_fan,
+  'zap': i_zap,
+  'calendar-check': i_calendar_check,
+  'file-text': i_file_text,
+  'circle-check': i_circle_check,
+  'list-checks': i_list_checks,
+  'gauge': i_gauge,
+  'wind': i_wind,
+  'trash-2': i_trash_2,
+  'message-square-text': i_message_square_text,
+  'banknote': i_banknote,
+  'hand-coins': i_hand_coins,
+  'badge-check': i_badge_check,
+  'users': i_users,
+  'power': i_power,
+  'layers': i_layers,
+  'thumbs-up': i_thumbs_up,
+  'circle-help': i_circle_help,
+  'arrow-up-right': i_arrow_up_right,
+  'scale': i_scale,
+  'droplets': i_droplets,
+  'leaf': i_leaf,
+  'hammer': i_hammer,
+  'arrow-down-right': i_arrow_down_right,
+  'heart-handshake': i_heart_handshake,
+  'timer': i_timer,
+  'calendar-days': i_calendar_days,
+  'thermometer-sun': i_thermometer_sun,
+  'piggy-bank': i_piggy_bank,
+  'hard-hat': i_hard_hat,
+  'clipboard-check': i_clipboard_check,
+  'shield': i_shield,
+  'star': i_star,
+  'recycle': i_recycle,
+  'refresh-cw': i_refresh_cw,
+  'circle-arrow-right': i_circle_arrow_right,
+};
+
+const facebook = '<path d="M14 8.5h2.5V5.2c-.4-.1-1.6-.2-3-.2-3 0-5 1.8-5 5.2V13H5.4v3.7h3.1V24h3.8v-7.3h3.1l.5-3.7h-3.6v-2.5c0-1.1.3-2 1.7-2Z" fill="currentColor" stroke="none"/>';
+
+export type IconName = keyof typeof raw | 'facebook';
+
+interface Props {
+  name: string;
+  size?: number | string;
+  label?: string;
+  class?: string;
+  strokeWidth?: number;
+}
+
+const { name, size = 24, label, class: className, strokeWidth = 2 } = Astro.props;
+
+const inner = name === 'facebook'
+  ? facebook
+  : (raw[name] ?? '').replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '').trim();
+
+if (!inner) throw new Error(`Unknown icon: ${name}`);
+---
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={strokeWidth}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={className}
+  aria-hidden={label ? undefined : 'true'}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  focusable="false"
+  set:html={inner}
+/>

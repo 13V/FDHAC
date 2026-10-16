@@ -1,0 +1,324 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Icon from '../../components/Icon.astro';
+import MediaSplit from '../../components/MediaSplit.astro';
+import ReplacementGrid from '../../components/ReplacementGrid.astro';
+import PriceTag from '../../components/PriceTag.astro';
+import Reviews from '../../components/Reviews.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { site } from '../../data/site';
+import { reviews } from '../../data/reviews';
+import { formatPrice, lowestReplacementPrice, replacements, priceNote } from '../../data/prices';
+
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Air conditioning', href: '/home-air-conditioning-adelaide' },
+  { label: 'Replacement units', href: '/air-conditioning-adelaide/ducted-air-conditioning-replacement-units' },
+];
+
+const included = [
+  'Complete removal of your existing ducted unit',
+  'New Samsung ducted high-efficiency inverter',
+  'New indoor fan unit and outdoor condensing unit',
+  'New refrigeration pipes and control wiring',
+  'New backlit Samsung wall controller',
+  'Ducting transition to suit the new fan coil',
+];
+
+const day = [
+  { icon: 'clipboard-check', title: 'Site visit & order', text: 'We visit to confirm the details and take your order. No deposit is required.' },
+  { icon: 'calendar-check', title: 'A date that suits you', text: 'We arrange a convenient installation date with you.' },
+  { icon: 'clock', title: '8am start', text: 'Our tradesmen arrive at 8am, decommission your old system and lay dust sheets on your floors.' },
+  { icon: 'trash-2', title: 'Out with the old', text: 'We remove the old units from your roof and outside, plus the old refrigeration pipes and electrical components.' },
+  { icon: 'wrench', title: 'In with the new', text: 'The new indoor unit goes in your roof space on your existing ducting. The outdoor unit goes where you’d like it.' },
+  { icon: 'gauge', title: 'Commissioned & tested', text: 'New pipes (with protective capping if needed) and a new wall controller are fitted, then the system is commissioned and tested.' },
+  { icon: 'thumbs-up', title: 'Handover', text: 'We show you how to use your new system. The Samsung controller is backlit and very easy to use.' },
+  { icon: 'sparkles', title: 'Tidy up', text: 'We clean up and take all the rubbish away. Your invoice is emailed or posted to you, with no extra or hidden costs.' },
+];
+
+const offerSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'OfferCatalog',
+  name: 'Ducted air conditioning replacement units',
+  itemListElement: replacements.map((r) => ({
+    '@type': 'Offer',
+    name: `${r.kw} kW Samsung ducted inverter replacement, fully installed`,
+    price: r.price,
+    priceCurrency: 'AUD',
+    seller: { '@id': `${site.url}/#business` },
+  })),
+};
+---
+
+<Base
+  title="Ducted Air Conditioning Replacement Units Adelaide"
+  description={`Replace your old ducted air conditioner with a new Samsung high-efficiency inverter. Fully installed from ${formatPrice(lowestReplacementPrice)}, connected to your existing ducting. No deposit, 5-year warranty. Adelaide.`}
+  breadcrumbs={crumbs}
+  schema={offerSchema}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Ducted replacement units"
+    title="Old ducted system? Swap it for a new <span class='hl'>Samsung inverter</span>."
+    lede="If your energy bills are unusually high, the age of your system could be why. Older units work harder, cost more to run and break down more often. A new high-efficiency inverter will cut your energy bills and save you money every year."
+    photo="outdoorUnitsPair"
+  >
+    <Fragment slot="actions">
+      <a class="btn btn--primary btn--arrow" href="/contact">Book a site visit <span class="btn__circle"><Icon name="arrow-up-right" /></span></a>
+      <a class="btn btn--outline" href={site.phone.href}><Icon name="phone" /> {site.phone.display}</a>
+    </Fragment>
+    <div class="hero-tag" slot="aside">
+      <PriceTag kicker="Ducted changeover" price={formatPrice(lowestReplacementPrice)} meta="No deposit · 5-year warranty" />
+    </div>
+  </PageHero>
+
+  <!-- Why replace -->
+  <section class="section" aria-labelledby="why-title">
+    <div class="container">
+      <MediaSplit photo="hisenseOutdoorUnit" eyebrow="Why replace?" id="why-title" title="Spend a little now, save every year after.">
+        <p class="lede">
+          Running an old ducted unit can mean much higher energy bills and costly repairs. Replacing it might feel like a big
+          expense, but in the long run you could save hundreds to thousands of dollars every year on running and repair costs.
+        </p>
+        <p>
+          Samsung ducted reverse cycle systems are quiet, highly efficient and easy to maintain, which makes them the ideal
+          choice for a changeover.
+        </p>
+      </MediaSplit>
+    </div>
+  </section>
+
+  <!-- What's included -->
+  <section class="section section--surface" aria-labelledby="inc-title">
+    <div class="container">
+      <SectionHead eyebrow="What’s included" id="inc-title" title="Everything you need, fully installed." center />
+      <ul class="inc">
+        {
+          included.map((item) => (
+            <li>
+              <span class="tick">
+                <Icon name="check" />
+              </span>
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+      <div class="callout inc__note">
+        <Icon name="info" />
+        <p>Replacing zones or flexible ducting isn’t included in these prices.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prices -->
+  <section class="section" aria-labelledby="price-title">
+    <div class="container">
+      <SectionHead
+        eyebrow="Replacement prices"
+        id="price-title"
+        title="Replacement units and prices."
+        lede="All options are Samsung ducted high-efficiency inverters, fully installed and connected to your existing ducting."
+      />
+      <ReplacementGrid />
+      <p class="fine rp__note">*{priceNote}</p>
+    </div>
+  </section>
+
+  <!-- Installation day -->
+  <section class="section section--surface" aria-labelledby="day-title">
+    <div class="container">
+      <SectionHead eyebrow="What’s next?" id="day-title" title="Installation day, step by step." center />
+      <ol class="day">
+        {
+          day.map((d, i) => (
+            <li class="day__step">
+              <span class="day__icon">
+                <Icon name={d.icon} />
+              </span>
+              <div>
+                <p class="day__n">Step {i + 1}</p>
+                <h3>{d.title}</h3>
+                <p>{d.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Warranty -->
+  <section class="section" aria-labelledby="terms-title">
+    <div class="container">
+      <h2 id="terms-title" class="visually-hidden">Warranty and payment</h2>
+      <ul class="terms">
+        <li>
+          <span class="icon-chip icon-chip--navy"><Icon name="shield-check" /></span>
+          <h3>5-year warranty</h3>
+          <p>Replacement units are covered by a 5-year warranty, and the installation is guaranteed for 5 years.</p>
+        </li>
+        <li>
+          <span class="icon-chip icon-chip--navy"><Icon name="banknote" /></span>
+          <h3>No deposit</h3>
+          <p>There’s nothing to pay up front. Your invoice is emailed or posted to you once the job is done.</p>
+        </li>
+        <li>
+          <span class="icon-chip icon-chip--navy"><Icon name="badge-check" /></span>
+          <h3>No hidden costs</h3>
+          <p>We confirm every detail at your site visit before you go ahead, and there are no extra or hidden costs.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="section section--flush-top" aria-labelledby="t-title">
+    <div class="container container--narrow">
+      <SectionHead eyebrow="Testimonial" id="t-title" title="A changeover, in our customers’ words." center />
+      <Reviews items={reviews.filter((r) => r.name === 'Sally & Neville Clarke')} feature />
+      <p class="maint">
+        Keep your energy bills down by maintaining your system regularly.{' '}
+        <a class="link" href="/air-conditioning-maintenance-tips">Read our maintenance tips</a>.
+      </p>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Find out what you could save."
+    text="We’ll visit to check your existing system and ducting, confirm the right replacement and your fully installed price."
+    photo="outdoorUnitBrick"
+  />
+</Base>
+
+<style>
+  .hero-tag {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+  }
+  .inc {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+    max-width: 980px;
+    margin-inline: auto;
+  }
+  @media (min-width: 760px) {
+    .inc {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .inc li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    background: var(--white);
+    font-weight: 650;
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+  .inc .tick {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--yellow-400);
+  }
+  .inc .tick :global(svg) {
+    width: 16px;
+    height: 16px;
+    stroke-width: 3;
+  }
+  .inc__note {
+    max-width: 980px;
+    margin: 16px auto 0;
+  }
+  .rp__note {
+    margin-top: 18px;
+  }
+
+  .day {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 700px) {
+    .day {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .day {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .day__step {
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+  }
+  .day__icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: var(--yellow-400);
+    color: var(--navy-900);
+  }
+  .day__n {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blue-600);
+  }
+  .day__step h3 {
+    margin-top: 4px;
+    font-size: 1.5rem;
+  }
+  .day__step p:not(.day__n) {
+    margin-top: 6px;
+    font-size: 0.95rem;
+  }
+
+  .terms {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 18px;
+  }
+  @media (min-width: 900px) {
+    .terms {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .terms li {
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .terms h3 {
+    margin-top: 18px;
+  }
+  .terms p {
+    margin-top: 8px;
+  }
+  .maint {
+    margin-top: 28px;
+    text-align: center;
+  }
+</style>

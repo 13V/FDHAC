@@ -1,0 +1,74 @@
+---
+import samsung from '../assets/brands/samsung.svg?raw';
+import fujitsu from '../assets/brands/fujitsu.svg?raw';
+import hisense from '../assets/brands/hisense.svg?raw';
+
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+
+const logos = [
+  { name: 'Samsung', svg: samsung, h: 21 },
+  { name: 'Fujitsu', svg: fujitsu, h: 44 },
+  { name: 'Hisense', svg: hisense, h: 23 },
+];
+const withLabel = (svg: string, name: string) => svg.replace('<svg ', `<svg role="img" aria-label="${name}" `);
+---
+
+<div class:list={['brands', { 'brands--compact': compact }]}>
+  <p class="brands__label">{compact ? 'We supply & install' : 'Leading brands we supply & install'}</p>
+  <ul class="brands__list">
+    {
+      logos.map((l) => (
+        <li style={`--h:${l.h}px`} set:html={withLabel(l.svg, l.name)} />
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .brands {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 40px;
+  }
+  .brands__label {
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 0.98rem;
+  }
+  .brands__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px clamp(28px, 5vw, 72px);
+    list-style: none;
+    padding: 0;
+    color: #4f5d73;
+  }
+  .brands__list li {
+    line-height: 0;
+  }
+  .brands__list li :global(svg) {
+    height: var(--h);
+    width: auto;
+  }
+  .brands--compact {
+    justify-content: flex-start;
+    gap: 12px 26px;
+  }
+  .brands--compact .brands__label {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .brands--compact .brands__list {
+    gap: 14px 28px;
+  }
+  .brands--compact .brands__list li :global(svg) {
+    height: calc(var(--h) * 0.8);
+  }
+</style>

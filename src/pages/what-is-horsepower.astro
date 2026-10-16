@@ -1,0 +1,59 @@
+---
+import Article from '../layouts/Article.astro';
+import HorsepowerChart from '../components/HorsepowerChart.astro';
+import Icon from '../components/Icon.astro';
+
+const toc = [
+  { id: 'meaning', label: 'What does horsepower mean?' },
+  { id: 'kw', label: 'Why we quote in kW' },
+  { id: 'compare', label: 'How to compare quotes' },
+];
+---
+
+<Article
+  title="What Is Horsepower? Air Conditioner Capacity Explained"
+  description="Why horsepower is a misleading way to compare air conditioners, and why you should always compare capacity in kW instead."
+  crumb="What is horsepower?"
+  heading="What is horsepower, and why doesn’t it matter?"
+  lede="Retailers still quote air conditioners in horsepower. Here’s why that number can’t tell you how much heating or cooling you’re getting, and what to ask for instead."
+  photo="outdoorUnitBracket"
+  toc={toc}
+>
+  <h2 id="meaning">What does horsepower mean for an air conditioner?</h2>
+  <p>
+    The Australian Government’s Energy Rating website (<a href="https://www.energyrating.gov.au/" rel="noopener">energyrating.gov.au</a>)
+    answers this directly:
+  </p>
+  <blockquote>
+    <p>
+      “The ongoing use of horsepower by retailers is of concern to energy regulators in Australia. This term bears no relation
+      to the output capacity of the unit. The only valid capacity measure is the kW output under AS/NZS3823 condition T1 for
+      cooling or H1 for heating.”
+    </p>
+  </blockquote>
+  <p>
+    The term comes from a time when air conditioner compressors were driven by mechanical motors. Today, how much heating or
+    cooling a unit delivers depends on the efficiency of its motor and compressor, the design of its evaporator and condenser,
+    airflow, fan efficiency, the control system and more. Using the power of the electric motor as a stand-in for capacity is
+    misleading in every case.
+  </p>
+
+  <h2 id="kw">Why we quote in kW</h2>
+  <p>
+    At Factory Direct Home Air Conditioning we always quote the capacity of a unit in kW. A unit with poor efficiency might put
+    out 2.0 kW and be marketed as “1 horsepower”, while a high-efficiency unit putting out 2.7 kW could be marketed as
+    “1 horsepower” too.
+  </p>
+
+  <HorsepowerChart />
+
+  <h2 id="compare">How to compare quotes</h2>
+  <p>
+    It’s hard to compare air conditioners by horsepower, but easy to compare them by kilowatts. If another retailer quotes you
+    in horsepower, ask them for the capacity in kW so you can make an accurate comparison.
+  </p>
+  <div class="callout">
+    <Icon name="triangle-alert" />
+    <p><strong>Tip:</strong> compare the kW output for cooling and for heating. They’re usually different numbers.</p>
+  </div>
+</Article>

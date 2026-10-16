@@ -1,0 +1,81 @@
+---
+import Icon from './Icon.astro';
+import Photo from './Photo.astro';
+import { site } from '../data/site';
+import type { PhotoKey } from '../data/photos';
+
+interface Props {
+  title?: string;
+  text?: string;
+  photo?: PhotoKey;
+}
+const {
+  title = 'Ready for a cooler summer and a warmer winter?',
+  text = 'Call us directly or send a few details, and we’ll arrange a free, no-obligation site inspection and quote.',
+  photo = 'adelaideAerial',
+} = Astro.props;
+---
+
+<section class="cta" aria-labelledby="cta-title">
+  <div class="container">
+    <div class="cta__panel on-dark">
+      <Photo name={photo} class="cta__bg" rounded={false} sizes="100vw" />
+      <div class="cta__content">
+        <span class="eyebrow">Free quote · No obligation</span>
+        <h2 id="cta-title">{title}</h2>
+        <p class="lede">{text}</p>
+        <div class="btn-row cta__actions">
+          <a class="btn btn--primary btn--arrow" href="/contact">
+            Get a free quote <span class="btn__circle"><Icon name="arrow-up-right" /></span>
+          </a>
+          <a class="btn btn--ghost-light" href={site.phone.href}><Icon name="phone" /> {site.phone.display}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    padding-block: clamp(24px, 4vw, 48px) var(--section);
+  }
+  .cta__panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-xl);
+    background: var(--navy-900);
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+  }
+  .cta__panel :global(.cta__bg) {
+    position: absolute;
+    inset: 0;
+  }
+  .cta__panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(6 20 48 / 0.94) 0%, rgb(6 20 48 / 0.82) 45%, rgb(6 20 48 / 0.25) 100%);
+  }
+  .cta__content {
+    position: relative;
+    z-index: 1;
+    padding: clamp(32px, 6vw, 80px);
+    max-width: 680px;
+  }
+  .cta h2 {
+    margin-top: 1rem;
+  }
+  .cta .lede {
+    margin-top: 1rem;
+  }
+  .cta__actions {
+    margin-top: 2rem;
+  }
+  @media (max-width: 700px) {
+    .cta__panel::after {
+      background: linear-gradient(180deg, rgb(6 20 48 / 0.82), rgb(6 20 48 / 0.94));
+    }
+  }
+</style>

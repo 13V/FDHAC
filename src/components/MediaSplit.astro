@@ -1,0 +1,65 @@
+---
+/** Photo on one side, content on the other. */
+import Photo from './Photo.astro';
+import type { PhotoKey } from '../data/photos';
+
+interface Props {
+  photo: PhotoKey;
+  reverse?: boolean;
+  eyebrow?: string;
+  title: string;
+  id?: string;
+  ratio?: string;
+  photoPosition?: string;
+}
+const { photo, reverse = false, eyebrow, title, id, ratio = '4 / 3', photoPosition } = Astro.props;
+---
+
+<div class:list={['msplit', { 'msplit--reverse': reverse }]}>
+  <div class="msplit__media" style={`--ratio:${ratio}`}>
+    <Photo name={photo} sizes="(min-width: 980px) 50vw, 100vw" position={photoPosition} />
+    <slot name="overlay" />
+  </div>
+  <div class="msplit__body">
+    {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+    <h2 id={id} set:html={title} />
+    <div class="msplit__content">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .msplit {
+    display: grid;
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+  @media (min-width: 980px) {
+    .msplit {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+    .msplit--reverse .msplit__media {
+      order: 2;
+    }
+  }
+  .msplit__media {
+    position: relative;
+  }
+  .msplit__media :global(.photo) {
+    aspect-ratio: var(--ratio);
+  }
+  .msplit__body h2 {
+    margin-top: 1rem;
+  }
+  .msplit__content {
+    margin-top: 1.1rem;
+  }
+  .msplit__content > :global(* + *) {
+    margin-top: 1rem;
+  }
+  .msplit__content :global(.ticks),
+  .msplit__content :global(.btn-row) {
+    margin-top: 1.5rem;
+  }
+</style>

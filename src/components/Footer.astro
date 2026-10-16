@@ -1,0 +1,199 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, footerNav } from '../data/site';
+import { priceNote } from '../data/prices';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer on-dark">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="/" class="footer__logo" aria-label={`${site.name}, home`}><Logo title={site.name} /></a>
+        <p>
+          Family owned and run in South Australia for {site.years}. We buy in bulk, keep our overheads low and pass the
+          savings on to you.
+        </p>
+        <div class="footer__social">
+          <a class="icon-btn" href={site.facebook} rel="noopener" target="_blank" aria-label="Facebook (opens in a new tab)">
+            <Icon name="facebook" />
+          </a>
+          <a class="icon-btn" href={`mailto:${site.email}`} aria-label={`Email ${site.email}`}>
+            <Icon name="mail" />
+          </a>
+          <a class="icon-btn" href={site.phone.href} aria-label={`Call ${site.phone.display}`}>
+            <Icon name="phone" />
+          </a>
+        </div>
+      </div>
+
+      {
+        footerNav.map((col) => (
+          <nav class="footer__col" aria-label={col.heading}>
+            <h2>{col.heading}</h2>
+            <ul>
+              {col.items.map((item) => (
+                <li>
+                  <a href={item.href}>{item.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+
+      <div class="footer__col">
+        <h2>Contact us</h2>
+        <ul class="footer__contact">
+          <li>
+            <span class="footer__ci"><Icon name="phone" size={18} /></span>
+            <span><span class="footer__k">Call</span><a class="footer__big num" href={site.phone.href}>{site.phone.display}</a></span>
+          </li>
+          <li>
+            <span class="footer__ci"><Icon name="mail" size={18} /></span>
+            <span><span class="footer__k">Email</span><a href={`mailto:${site.email}`}>{site.email}</a></span>
+          </li>
+          <li>
+            <span class="footer__ci"><Icon name="map-pin" size={18} /></span>
+            <span><span class="footer__k">Service area</span>{site.address || site.region}</span>
+          </li>
+          {
+            site.hours && (
+              <li>
+                <span class="footer__ci">
+                  <Icon name="clock" size={18} />
+                </span>
+                <span>
+                  <span class="footer__k">Hours</span>
+                  {site.hours}
+                </span>
+              </li>
+            )
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>&copy; {year} {site.name}{site.abn && ` · ABN ${site.abn}`}{site.arcAuthorisation && ` · ARCtick ${site.arcAuthorisation}`}</p>
+      <p>*{priceNote}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--navy-950);
+    padding-top: clamp(56px, 7vw, 88px);
+    font-size: 0.96rem;
+  }
+  .footer__top {
+    display: grid;
+    gap: 40px 32px;
+    padding-bottom: clamp(40px, 5vw, 64px);
+  }
+  @media (min-width: 720px) {
+    .footer__top {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1080px) {
+    .footer__top {
+      grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 0.8fr)) minmax(0, 1.1fr);
+    }
+  }
+  .footer__logo {
+    display: block;
+    width: 170px;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+  .footer__logo :global(svg) {
+    width: 100%;
+    height: auto;
+  }
+  .footer__brand p {
+    max-width: 36ch;
+  }
+  .footer__social {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .footer__social .icon-btn {
+    background: rgb(255 255 255 / 0.06);
+    border-color: rgb(255 255 255 / 0.16);
+    color: var(--white);
+  }
+  .footer__social .icon-btn:hover {
+    background: var(--yellow-400);
+    border-color: var(--yellow-400);
+    color: var(--navy-900);
+  }
+  .footer__col h2 {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .footer__col ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 11px;
+  }
+  .footer__col a {
+    text-decoration: none;
+  }
+  .footer__col a:hover {
+    color: var(--yellow-400);
+  }
+  .footer__contact li {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 12px;
+    align-items: center;
+    overflow-wrap: anywhere;
+  }
+  .footer__contact li > span:last-child {
+    display: grid;
+    line-height: 1.35;
+  }
+  .footer__ci {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgb(255 198 41 / 0.14);
+    color: var(--yellow-400);
+  }
+  .footer__k {
+    font-size: 0.78rem;
+    color: rgb(255 255 255 / 0.5);
+  }
+  .footer__big {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-block: 22px;
+    border-top: 1px solid var(--on-dark-line);
+    font-size: 0.86rem;
+    color: rgb(255 255 255 / 0.55);
+  }
+  @media (max-width: 1120px) {
+    .footer {
+      padding-bottom: calc(76px + env(safe-area-inset-bottom));
+    }
+  }
+</style>

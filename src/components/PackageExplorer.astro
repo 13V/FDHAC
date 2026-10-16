@@ -1,0 +1,244 @@
+---
+/** Ducted package cards with a Samsung / Fujitsu switch. */
+import Icon from './Icon.astro';
+import { packages, brandLabels, formatPrice, type Brand } from '../data/prices';
+
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+const brands = Object.keys(brandLabels) as Brand[];
+---
+
+<div class="pkgs" data-pkgs data-brand="samsung">
+  <div class="pkgs__bar">
+    <p class="pkgs__hint"><Icon name="info" size={18} /> New ducted inverter systems, fully installed</p>
+    <div class="tabs" role="group" aria-label="Brand">
+      {
+        brands.map((b, i) => (
+          <button type="button" aria-pressed={i === 0 ? 'true' : 'false'} data-brand-btn={b} aria-controls={`${id}-list`}>
+            {brandLabels[b]}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <p class="visually-hidden" aria-live="polite" data-brand-status></p>
+  <ol class="pkgs__list" id={`${id}-list`} tabindex="0" aria-label="Ducted packages">
+    {
+      packages.map((p) => (
+        <li class="pkg">
+          <p class="pkg__name">Package {p.id}</p>
+          <p class="pkg__kw price-fig">
+            <span class="num">{p.kw}</span>
+            <span class="pkg__unit">kW</span>
+          </p>
+          <p class="pkg__type">
+            {brands.map((b) => (
+              <span data-for={b}>{brandLabels[b]}</span>
+            ))}{' '}
+            ducted inverter
+          </p>
+          <ul class="pkg__spec">
+            <li>
+              <Icon name="wind" size={18} /> {p.outlets} outlets
+            </li>
+            <li>
+              <Icon name="layers" size={18} /> {p.zones} zones
+            </li>
+            <li>
+              <Icon name="house" size={18} /> {p.suits}
+            </li>
+          </ul>
+          <div class="pkg__price">
+            <span class="pkg__from">Fully installed from</span>
+            {brands.map((b) => (
+              <span class="pkg__amount price-fig num" data-for={b}>
+                {formatPrice(p.prices[b])}
+                <sup>*</sup>
+                <span class="visually-hidden"> for {brandLabels[b]}</span>
+              </span>
+            ))}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .pkgs__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px 20px;
+    margin-bottom: 22px;
+  }
+  .pkgs__hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .pkgs__hint :global(svg) {
+    color: var(--blue-600);
+  }
+  .tabs {
+    display: inline-flex;
+    gap: 4px;
+    padding: 5px;
+    border-radius: 999px;
+    background: var(--surface-2);
+  }
+  .tabs button {
+    min-height: 42px;
+    min-width: 108px;
+    padding: 6px 18px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    font-weight: 700;
+    color: var(--ink);
+    transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .tabs button:hover {
+    background: rgb(255 255 255 / 0.6);
+  }
+  .tabs button[aria-pressed='true'] {
+    background: var(--navy-900);
+    color: var(--white);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .pkgs__list {
+    position: relative;
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 215px), 1fr));
+  }
+  @media (max-width: 719px) {
+    .pkgs__list {
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(240px, 78%);
+      grid-template-columns: none;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 4px var(--gutter) 16px;
+      margin-inline: calc(var(--gutter) * -1);
+      scroll-padding-inline: var(--gutter);
+    }
+    .pkg {
+      scroll-snap-align: start;
+    }
+  }
+
+  .pkg {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 22px 22px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .pkg:hover {
+    border-color: transparent;
+    box-shadow: var(--shadow);
+    transform: translateY(-3px);
+  }
+  .pkg__name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue-600);
+  }
+  .pkg__kw {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .pkg__kw .num {
+    font-size: 3.6rem;
+  }
+  .pkg__unit {
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+  .pkg__type {
+    margin-top: 6px;
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 0.93rem;
+  }
+  .pkg__spec {
+    display: grid;
+    gap: 9px;
+    margin-top: 18px;
+    padding: 16px 0 0;
+    border-top: 1px dashed var(--line);
+    list-style: none;
+    font-size: 0.93rem;
+    flex: 1;
+    align-content: start;
+  }
+  .pkg__spec li {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 8px;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .pkg__spec :global(svg) {
+    margin-top: 1px;
+    color: var(--blue-600);
+  }
+  .pkg__price {
+    display: grid;
+    margin-top: 20px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    background: var(--yellow-100);
+  }
+  .pkg__from {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .pkg__amount {
+    font-size: 2.1rem;
+    margin-top: 2px;
+  }
+  .pkg__amount sup {
+    font-size: 0.5em;
+    color: var(--yellow-500);
+    top: -0.7em;
+  }
+
+  .pkgs[data-brand='samsung'] [data-for='fujitsu'],
+  .pkgs[data-brand='fujitsu'] [data-for='samsung'] {
+    display: none;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-pkgs]').forEach((root) => {
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-brand-btn]');
+    const status = root.querySelector<HTMLElement>('[data-brand-status]');
+    buttons.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        root.dataset.brand = btn.dataset.brandBtn;
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        if (status) status.textContent = `Showing ${btn.textContent?.trim()} prices`;
+      }),
+    );
+  });
+</script>

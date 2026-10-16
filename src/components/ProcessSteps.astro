@@ -1,0 +1,82 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  steps: { title: string; text: string; icon: string }[];
+}
+const { steps } = Astro.props;
+---
+
+<ol class="steps" style={`--cols:${steps.length}`}>
+  {
+    steps.map((s, i) => (
+      <li class="step">
+        <div class="step__icon">
+          <Icon name={s.icon} size={26} />
+          <span class="step__n num">{i + 1}</span>
+        </div>
+        <h3 class="step__title">{s.title}</h3>
+        <p class="step__text">{s.text}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .steps {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 700px) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .steps {
+      grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr));
+    }
+  }
+  .step {
+    padding: 26px 24px;
+    background: var(--white);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .step__icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: var(--navy-900);
+    color: var(--yellow-400);
+  }
+  .step__n {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--yellow-400);
+    color: var(--navy-900);
+    font-size: 0.82rem;
+    font-weight: 800;
+    border: 2px solid var(--white);
+  }
+  .step__title {
+    margin-top: 20px;
+    font-size: 1.55rem;
+  }
+  .step__text {
+    margin-top: 8px;
+    font-size: 0.95rem;
+  }
+</style>

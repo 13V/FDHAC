@@ -1,0 +1,101 @@
+---
+import Article from '../layouts/Article.astro';
+import ThermostatCalc from '../components/ThermostatCalc.astro';
+import Icon from '../components/Icon.astro';
+
+const toc = [
+  { id: 'temperature', label: 'Set the right temperature' },
+  { id: 'filters', label: 'Keep the filters clean' },
+  { id: 'features', label: 'Use your system’s features' },
+  { id: 'home', label: 'Make smart choices at home' },
+  { id: 'replace', label: 'Change over an old unit' },
+  { id: 'build', label: 'Planning to build?' },
+];
+---
+
+<Article
+  title="How to Reduce Air Conditioning Running Costs"
+  description="Simple ways to cut your air conditioning running costs: the right thermostat settings, clean filters, zoning, timers and smart choices around your home."
+  crumb="Reduce running costs"
+  heading="How to reduce your air conditioning running costs."
+  lede="When summer and winter arrive, so do bigger energy bills. These simple tips will help keep your running costs down during the busiest months."
+  photo="remoteControl"
+  toc={toc}
+>
+  <h2 id="temperature">Set your air conditioner to the right temperature</h2>
+  <p>
+    Running your air conditioner too cold in summer, or too warm in winter, pushes up your energy bills and adds wear and tear
+    to the motor. We recommend <strong>24–26°C in summer</strong> and <strong>19–21°C in winter</strong>.
+  </p>
+  <p>
+    In summer, every degree cooler than that range adds roughly 10% to your running costs, and in winter every degree warmer
+    adds about 10%. The less the compressor has to work, the lower your bills.
+  </p>
+
+  <ThermostatCalc id="costs-thermo" />
+
+  <h2 id="filters">Keep your aircon’s filters clean</h2>
+  <p>
+    Dirt and dust clog the filters and reduce your system’s performance, so it has to work harder to keep your home at the
+    right temperature. Cleaning them is a simple job that keeps your air conditioner running efficiently. See our
+    <a href="/air-conditioning-maintenance-tips">maintenance tips</a> for how, and always follow the manufacturer’s
+    recommendations.
+  </p>
+
+  <h2 id="features">Use the features on your system</h2>
+  <p>
+    Most reverse cycle systems have features that help them heat and cool more efficiently, such as timers, human sensors and
+    zoning.
+  </p>
+  <ul>
+    <li><strong>Zones:</strong> switching off unused zones on a ducted system lowers your energy use.</li>
+    <li>
+      <strong>Timers:</strong> start the system before the outside temperature peaks. Turning it on in the hottest part of the
+      day makes it work much harder to cool your home.
+    </li>
+    <li>
+      <strong>Human sensors:</strong> some systems switch to an energy-saving mode when no movement has been detected for 20
+      minutes.
+    </li>
+  </ul>
+
+  <h2 id="home">Make smart choices around your home</h2>
+  <p>Cutting your heating and cooling costs isn’t only about the air conditioner. Small changes reduce its workload too.</p>
+  <ul>
+    <li>With reverse cycle systems, keep doors and windows closed while the system is running.</li>
+    <li>
+      Use natural heating and cooling. In winter, open the curtains to let the sun in and close them at night to keep the
+      warmth in. In summer, keep curtains drawn in direct sunlight and open windows at night if it’s cooler outside.
+    </li>
+    <li>Make sure your home is well insulated. Old insulation that has flattened out does very little and should be replaced.</li>
+    <li>Curtains, roller blinds or shutters on large windows keep direct sunlight out.</li>
+    <li>Turn off appliances you aren’t using. They use power and add heat, making your air conditioner work harder.</li>
+    <li>Ceiling or portable fans help spread cool or warm air through your home faster.</li>
+  </ul>
+  <div class="callout callout--blue">
+    <Icon name="info" />
+    <p>
+      Evaporative coolers are the exception: they need ventilation, so open some windows and doors to let the air flow
+      through the house.
+    </p>
+  </div>
+
+  <h2 id="replace">Change over your old unit</h2>
+  <p>
+    An old ducted unit can be a real drain on your energy bills. Older units have to work harder and use less efficient
+    technology. Replacing your existing ducted system with a new high-efficiency inverter will reduce your running costs. Find
+    out more about <a href="/air-conditioning-adelaide/ducted-air-conditioning-replacement-units">ducted replacement units</a>.
+  </p>
+
+  <h2 id="build">Planning to build?</h2>
+  <p>
+    Smart house design makes a big difference, so keep energy efficiency in mind when you plan your build. The more efficient
+    your house is, the less energy it takes to keep it comfortable, and the lower your bills will be.
+  </p>
+  <ul>
+    <li>Large glass windows add significantly to the heat load and need more air conditioning power, so curtains are a must.</li>
+    <li>Plain silvery galvanised iron roofing reflects heat better than dark Colorbond, which absorbs it.</li>
+    <li>If you have a roof space, consider ventilation such as a whirlybird to reduce heat build-up.</li>
+    <li>If space permits, larger eaves or a verandah will reduce heat loads by blocking direct sunlight.</li>
+  </ul>
+</Article>

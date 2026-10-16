@@ -1,0 +1,280 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
+import MediaSplit from '../components/MediaSplit.astro';
+import HouseDiagram from '../components/HouseDiagram.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import type { PhotoKey } from '../data/photos';
+
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Air conditioning', href: '/home-air-conditioning-adelaide' },
+  { label: 'Heating your home', href: '/heating-your-home' },
+];
+
+const options: { photo: PhotoKey; title: string; kicker: string; points: string[]; href: string; cta: string }[] = [
+  {
+    photo: 'ceilingDiffuser',
+    kicker: 'Whole home',
+    title: 'Ducted reverse cycle',
+    points: [
+      'Use it all year round',
+      'Complete comfort throughout the entire house',
+      'Control multiple rooms or the whole house from one system',
+      'Discreet, with quiet operation',
+      'The most efficient form of heating',
+      'Adds value to your home',
+    ],
+    href: '/ducted-reverse-cycle-air-conditioners',
+    cta: 'Ducted air conditioning',
+  },
+  {
+    photo: 'livingRoomSplit',
+    kicker: 'Single room',
+    title: 'Split system',
+    points: [
+      'Efficiently heats and cools a single room',
+      'Can be installed quickly',
+      'An affordable option',
+      'Quiet operation',
+      'Easy to maintain',
+    ],
+    href: '/home-air-conditioning-adelaide#split-systems',
+    cta: 'About split systems',
+  },
+];
+
+const tips = [
+  { icon: 'thermometer', title: 'Set 19–21°C', text: 'Every degree warmer adds roughly 10% to your running costs.' },
+  { icon: 'sun', title: 'Let the sun in', text: 'Open curtains on winter days and close them at night to keep the warmth in.' },
+  { icon: 'layers', title: 'Heat only what you use', text: 'Switch off zones for rooms nobody is in.' },
+];
+---
+
+<Base
+  title="Home Heating Adelaide | Reverse Cycle Heating"
+  description={`Efficient home heating in Adelaide with reverse cycle air conditioning. Ducted and split system options from a family-owned local company. Call ${site.phone.display} for a no-obligation quote.`}
+  breadcrumbs={crumbs}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Home heating, Adelaide"
+    title="The <span class='hl'>efficient</span> way to heat your home."
+    lede="Choosing the right heating can be overwhelming, and the wrong choice can more than double your energy bills. Reverse cycle air conditioning heats your home efficiently in winter and cools it in summer: one system, all year."
+    photo="thermostatWoman"
+  >
+    <Fragment slot="actions">
+      <a class="btn btn--primary btn--arrow" href="/contact">Get a free quote <span class="btn__circle"><Icon name="arrow-up-right" /></span></a>
+      <a class="btn btn--outline" href={site.phone.href}><Icon name="phone" /> {site.phone.display}</a>
+    </Fragment>
+    <div class="stat" slot="aside">
+      <span class="stat__v price-fig">40%</span>
+      <span class="stat__k">Heating can account for up to 40% of your energy bills</span>
+    </div>
+  </PageHero>
+
+  <section class="section" aria-labelledby="why-title">
+    <div class="container">
+      <div class="whyheat">
+        <div>
+          <span class="eyebrow">Why reverse cycle?</span>
+          <h2 id="why-title">What makes reverse cycle the best?</h2>
+          <p class="lede">
+            If you want home heating that’s energy efficient, reverse cycle air conditioning is the way to go. We believe it’s
+            the most efficient way to heat your home.
+          </p>
+          <ul class="ticks whyheat__list">
+            <li><span class="tick"><Icon name="check" /></span><span>One system keeps you cool in summer and warm in winter</span></li>
+            <li><span class="tick"><Icon name="check" /></span><span>Extremely energy efficient and better for the environment</span></li>
+            <li><span class="tick"><Icon name="check" /></span><span>Saves you money on running costs</span></li>
+            <li><span class="tick"><Icon name="check" /></span><span>Available as ducted or split systems to suit your home</span></li>
+          </ul>
+        </div>
+        <HouseDiagram id="heating-house" mode="heat" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--surface" aria-labelledby="opt-title">
+    <div class="container">
+      <SectionHead eyebrow="Your options" id="opt-title" title="Ducted or split system?" center lede="Reverse cycle comes in two main types. Here’s how they compare." />
+      <div class="opts">
+        {
+          options.map((o) => (
+            <article class="opt">
+              <Photo name={o.photo} class="opt__photo" sizes="(min-width: 900px) 50vw, 100vw" widths={[480, 720, 960, 1280]} />
+              <div class="opt__body">
+                <span class="opt__kicker">{o.kicker}</span>
+                <h3>{o.title}</h3>
+                <ul class="ticks">
+                  {o.points.map((p) => (
+                    <li>
+                      <span class="tick">
+                        <Icon name="check" />
+                      </span>
+                      <span>{p}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a class="text-link" href={o.href}>
+                  {o.cta}
+                  <span class="icon-btn">
+                    <Icon name="arrow-up-right" />
+                  </span>
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="tips-title">
+    <div class="container">
+      <MediaSplit photo="dogSofa" eyebrow="Winter tips" id="tips-title" title="Stay warm for less this winter." reverse ratio="4 / 5">
+        <ul class="tips">
+          {
+            tips.map((t) => (
+              <li>
+                <span class="icon-chip icon-chip--blue">
+                  <Icon name={t.icon} />
+                </span>
+                <div>
+                  <h3>{t.title}</h3>
+                  <p>{t.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="btn-row">
+          <a class="text-link" href="/how-to-reduce-air-conditioning-running-costs">More ways to cut running costs <span class="icon-btn"><Icon name="arrow-up-right" /></span></a>
+        </div>
+      </MediaSplit>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Heat your home efficiently this winter."
+    text={`With ${site.years} in the industry, we know it’s essential to choose a system that’s right for your home. Our qualified designer can meet with you to talk through your needs and make the best recommendation.`}
+  />
+</Base>
+
+<style>
+  .stat {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 320px;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    background: var(--yellow-400);
+    box-shadow: var(--shadow);
+  }
+  .stat__v {
+    font-size: 3.2rem;
+  }
+  .stat__k {
+    font-weight: 700;
+    color: var(--navy-900);
+    line-height: 1.3;
+    font-size: 0.95rem;
+  }
+  .whyheat {
+    display: grid;
+    gap: clamp(28px, 4vw, 56px);
+    align-items: center;
+  }
+  @media (min-width: 1040px) {
+    .whyheat {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    }
+  }
+  .whyheat h2 {
+    margin-top: 1rem;
+  }
+  .whyheat .lede {
+    margin-top: 1rem;
+  }
+  .whyheat__list {
+    margin-top: 1.6rem;
+    color: var(--ink);
+  }
+  .opts {
+    display: grid;
+    gap: 20px;
+  }
+  @media (min-width: 900px) {
+    .opts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .opt {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .opt :global(.opt__photo) {
+    aspect-ratio: 16 / 9;
+    border-radius: 0;
+  }
+  .opt__body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+    padding: 26px 28px 28px;
+  }
+  .opt__kicker {
+    align-self: flex-start;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--blue-50);
+    color: var(--blue-600);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .opt .ticks {
+    flex: 1;
+    color: var(--ink);
+  }
+  .opt .text-link {
+    align-self: flex-start;
+    margin-top: 6px;
+  }
+  .tips {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+  .tips li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .tips h3 {
+    font-size: 1.45rem;
+  }
+  .tips p {
+    margin-top: 2px;
+    font-size: 0.95rem;
+  }
+</style>

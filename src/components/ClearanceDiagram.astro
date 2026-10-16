@@ -1,0 +1,177 @@
+---
+/** Plan view of the clearances an outdoor unit needs (10 cm around, 100 cm in front of the fan). */
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+<figure class="clear">
+  <svg viewBox="0 0 560 400" role="img" aria-labelledby={`${id}-t`} xmlns="http://www.w3.org/2000/svg">
+    <title id={`${id}-t`}>
+      Plan view of an outdoor unit beside a house wall. Keep at least 10 centimetres clear on every side and about 100
+      centimetres clear in front of the fan.
+    </title>
+    <defs>
+      <pattern id={`${id}-hatch`} width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="8" class="hatch"></line>
+      </pattern>
+      <marker id={`${id}-dim`} viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+        <path d="M0 1 L10 5 L0 9 Z" class="dim-head"></path>
+      </marker>
+      <marker id={`${id}-air`} viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto">
+        <path d="M1 1 L9 5 L1 9 Z" class="air-head"></path>
+      </marker>
+    </defs>
+
+    <!-- House wall -->
+    <rect x="30" y="18" width="500" height="26" fill={`url(#${id}-hatch)`} class="wall"></rect>
+    <text x="40" y="36" class="t-small t-wall">House wall</text>
+
+    <!-- Keep-clear zones -->
+    <rect x="160" y="44" width="240" height="126" class="zone-min"></rect>
+    <rect x="160" y="170" width="240" height="200" class="zone-front"></rect>
+
+    <!-- Unit (top view) -->
+    <rect x="180" y="64" width="200" height="86" rx="5" class="unit"></rect>
+    <circle cx="242" cy="107" r="30" class="fan"></circle>
+    <circle cx="242" cy="107" r="18" class="fan-ring"></circle>
+    <path d="M300 78 h66 M300 90 h66 M300 102 h66 M300 114 h66 M300 126 h66 M300 138 h66" class="fins"></path>
+    <text x="280" y="164" text-anchor="middle" class="t-small t-unit">Outdoor unit (fan faces out)</text>
+
+    <!-- Airflow out of the fan -->
+    <path d="M224 186 V 236 M242 186 V 246 M260 186 V 236" class="air" marker-end={`url(#${id}-air)`}></path>
+
+    <!-- Dimensions -->
+    <line x1="420" y1="44" x2="420" y2="64" class="dim" marker-start={`url(#${id}-dim)`} marker-end={`url(#${id}-dim)`}></line>
+    <text x="432" y="59" class="t-dim">10 cm</text>
+
+    <line x1="160" y1="92" x2="180" y2="92" class="dim" marker-start={`url(#${id}-dim)`} marker-end={`url(#${id}-dim)`}></line>
+    <text x="150" y="96" text-anchor="end" class="t-dim">10 cm</text>
+
+    <line x1="380" y1="92" x2="400" y2="92" class="dim" marker-start={`url(#${id}-dim)`} marker-end={`url(#${id}-dim)`}></line>
+
+    <line x1="430" y1="150" x2="430" y2="350" class="dim" marker-start={`url(#${id}-dim)`} marker-end={`url(#${id}-dim)`}></line>
+    <text x="442" y="256" class="t-dim t-dim--big">100 cm</text>
+    <text x="442" y="276" class="t-small">in front of the fan</text>
+
+    <text x="280" y="310" text-anchor="middle" class="t-zone">Keep clear</text>
+    <text x="280" y="332" text-anchor="middle" class="t-small">No plants, creepers, bins or storage</text>
+  </svg>
+  <figcaption class="fine">Not to scale. Check your unit’s installation manual for its exact clearances.</figcaption>
+</figure>
+
+<style>
+  .clear {
+    margin: 2rem 0;
+    padding: clamp(14px, 2.5vw, 26px);
+    background: linear-gradient(180deg, #f7faff, #ffffff);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+  .clear svg {
+    width: 100%;
+    height: auto;
+  }
+  .clear figcaption {
+    margin-top: 10px;
+  }
+  svg text {
+    font-family: var(--font-sans);
+  }
+  .hatch {
+    stroke: var(--navy-900);
+    stroke-width: 1.3;
+    opacity: 0.35;
+  }
+  .wall {
+    stroke: var(--navy-900);
+    stroke-width: 2;
+  }
+  .zone-min {
+    fill: var(--blue-50);
+    stroke: var(--blue-500);
+    stroke-width: 2;
+    stroke-dasharray: 6 5;
+  }
+  .zone-front {
+    fill: var(--yellow-100);
+    stroke: var(--yellow-500);
+    stroke-width: 2;
+    stroke-dasharray: 6 5;
+  }
+  .unit {
+    fill: var(--white);
+    stroke: var(--navy-900);
+    stroke-width: 3;
+  }
+  .fan {
+    fill: var(--surface-2);
+    stroke: var(--navy-900);
+    stroke-width: 2.5;
+  }
+  .fan-ring {
+    fill: none;
+    stroke: var(--navy-900);
+    stroke-width: 1.4;
+    opacity: 0.6;
+  }
+  .fins {
+    stroke: var(--navy-900);
+    stroke-width: 1.6;
+    opacity: 0.7;
+  }
+  .air {
+    fill: none;
+    stroke: var(--heat);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 6 6;
+  }
+  .air-head {
+    fill: var(--heat);
+  }
+  .dim {
+    stroke: var(--navy-900);
+    stroke-width: 1.6;
+  }
+  .dim-head {
+    fill: var(--navy-900);
+  }
+  .t-small {
+    font-size: 13px;
+    fill: var(--muted);
+    font-weight: 500;
+  }
+  .t-wall {
+    paint-order: stroke;
+    stroke: var(--white);
+    stroke-width: 5px;
+    stroke-linejoin: round;
+    fill: var(--ink);
+    font-weight: 700;
+  }
+  .t-unit {
+    fill: var(--ink);
+    font-weight: 700;
+  }
+  .t-dim {
+    font-size: 13px;
+    font-weight: 700;
+    fill: var(--ink);
+  }
+  .t-dim--big {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .t-zone {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    fill: var(--heat-ink);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+</style>

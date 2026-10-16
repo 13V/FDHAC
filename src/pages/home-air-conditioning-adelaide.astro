@@ -1,0 +1,228 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
+import MediaSplit from '../components/MediaSplit.astro';
+import FeatureGrid from '../components/FeatureGrid.astro';
+import BrandStrip from '../components/BrandStrip.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import type { PhotoKey } from '../data/photos';
+import { formatPrice, lowestPackagePrice, lowestReplacementPrice } from '../data/prices';
+
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Air conditioning', href: '/home-air-conditioning-adelaide' },
+];
+
+const services: { photo: PhotoKey; icon: string; title: string; text: string; price: string; href: string; cta: string }[] = [
+  {
+    photo: 'ceilingDiffuser',
+    icon: 'house',
+    title: 'Ducted reverse cycle',
+    text: 'Heating and cooling for the whole house from one hidden system, with zones so you only run the rooms you’re using.',
+    price: `New systems from ${formatPrice(lowestPackagePrice)}*`,
+    href: '/ducted-reverse-cycle-air-conditioners',
+    cta: 'Ducted air conditioning',
+  },
+  {
+    photo: 'outdoorUnitsPair',
+    icon: 'recycle',
+    title: 'Ducted replacement units',
+    text: 'Swap an old, expensive-to-run ducted unit for a new Samsung high-efficiency inverter connected to your existing ducting.',
+    price: `Changeovers from ${formatPrice(lowestReplacementPrice)}*`,
+    href: '/air-conditioning-adelaide/ducted-air-conditioning-replacement-units',
+    cta: 'Replacement units',
+  },
+  {
+    photo: 'thermostatWoman',
+    icon: 'flame',
+    title: 'Heating your home',
+    text: 'Reverse cycle is one of the most efficient ways to heat a home. We’ll help you choose between ducted and split systems.',
+    price: 'Free, no-obligation advice',
+    href: '/heating-your-home',
+    cta: 'Home heating',
+  },
+];
+
+const splitPoints = [
+  'Efficiently cools and heats a single room',
+  'Can be installed quickly',
+  'An affordable option',
+  'Quiet operation',
+  'Easy to maintain',
+];
+
+const why = [
+  {
+    icon: 'banknote',
+    title: 'The best prices in Adelaide',
+    text: 'Low overheads, bulk buying and careful sizing save you money on the purchase price and on running costs for years to come.',
+  },
+  {
+    icon: 'shield-check',
+    title: 'Quality workmanship',
+    text: 'Qualified, experienced tradespeople complete every installation and repair to the highest standard, using quality materials.',
+  },
+  {
+    icon: 'message-square-text',
+    title: 'Independent, expert advice',
+    text: 'Our consultants give you honest guidance before and after the sale, and design a system around the way you live.',
+  },
+];
+---
+
+<Base
+  title="Home Air Conditioning Adelaide"
+  description={`Home air conditioning in Adelaide from a family-owned local company. Ducted reverse cycle, replacement units, split systems and heating, supplied and installed at factory-direct prices. Call ${site.phone.display}.`}
+  breadcrumbs={crumbs}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Home air conditioning, Adelaide"
+    title="Heating and cooling for <span class='hl'>Adelaide</span> homes."
+    lede={`We’ve been supplying and installing reverse cycle air conditioning in South Australia for ${site.years}. Tell us about your home and we’ll engineer a system that suits it, and your budget.`}
+    photo="livingRoomBright"
+  >
+    <Fragment slot="actions">
+      <a class="btn btn--primary btn--arrow" href="/contact">Get a free quote <span class="btn__circle"><Icon name="arrow-up-right" /></span></a>
+      <a class="btn btn--outline" href="/price-list">See our prices</a>
+    </Fragment>
+  </PageHero>
+
+  <section class="section" aria-labelledby="services-title">
+    <div class="container">
+      <SectionHead eyebrow="What we do" id="services-title" title="Our services." />
+      <ul class="hub">
+        {
+          services.map((s) => (
+            <li>
+              <a class="hub__card" href={s.href}>
+                <Photo name={s.photo} class="hub__photo" sizes="(min-width: 1040px) 33vw, 100vw" widths={[480, 720, 960]} />
+                <div class="hub__body">
+                  <span class="icon-chip">
+                    <Icon name={s.icon} />
+                  </span>
+                  <h3>{s.title}</h3>
+                  <p>{s.text}</p>
+                  <p class="hub__price">{s.price}</p>
+                  <span class="text-link">
+                    {s.cta}
+                    <span class="icon-btn">
+                      <Icon name="arrow-up-right" />
+                    </span>
+                  </span>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--surface" id="split-systems" aria-labelledby="split-title">
+    <div class="container">
+      <MediaSplit photo="livingRoomSplit" eyebrow="Split systems" id="split-title" title="One room? A split system might be all you need.">
+        <p class="lede">
+          Split system air conditioning is one of the most popular types of air conditioning installed, and a great fit for a
+          single living area, bedroom or home office. Like ducted systems, they’re reverse cycle, so they heat as well as cool.
+        </p>
+        <ul class="ticks">
+          {
+            splitPoints.map((p) => (
+              <li>
+                <span class="tick">
+                  <Icon name="check" />
+                </span>
+                <span>{p}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn--navy btn--arrow" href="/contact">Ask about split systems <span class="btn__circle"><Icon name="arrow-up-right" /></span></a>
+        </div>
+      </MediaSplit>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <BrandStrip />
+    </div>
+  </section>
+
+  <section class="section section--flush-top" aria-labelledby="why-title">
+    <div class="container">
+      <SectionHead eyebrow="Why choose us" id="why-title" title="Expert advice before and after the sale." center />
+      <FeatureGrid items={why} tone="surface" />
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .hub {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+  }
+  @media (min-width: 1040px) {
+    .hub {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .hub__card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    border: 1px solid var(--line-soft);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .hub__card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-3px);
+  }
+  .hub__card :global(.hub__photo) {
+    aspect-ratio: 16 / 10;
+    border-radius: 0;
+  }
+  .hub__body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    padding: 24px;
+  }
+  .hub__body h3 {
+    margin-top: 6px;
+  }
+  .hub__body > p:not(.hub__price) {
+    flex: 1;
+  }
+  .hub__price {
+    font-weight: 750;
+    color: var(--ink);
+    padding-top: 12px;
+    border-top: 1px solid var(--line-soft);
+  }
+  .hub__card:hover .icon-btn {
+    background: var(--yellow-400);
+    border-color: var(--yellow-400);
+    transform: rotate(-45deg);
+  }
+  .hub .text-link {
+    align-self: flex-start;
+  }
+</style>

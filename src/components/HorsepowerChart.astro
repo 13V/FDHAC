@@ -1,0 +1,105 @@
+---
+/** Two units both marketed as "1 horsepower" with very different kW outputs. */
+const units = [
+  { name: 'Unit A', note: 'Lower efficiency', kw: 2.0 },
+  { name: 'Unit B', note: 'Higher efficiency', kw: 2.7 },
+];
+const maxKw = Math.max(...units.map((u) => u.kw));
+const diff = Math.round((units[1].kw / units[0].kw - 1) * 100);
+---
+
+<figure class="hp">
+  <p class="label hp__k">Both advertised as “1 horsepower”</p>
+  <div class="hp__rows">
+    {
+      units.map((u, i) => (
+        <div class="hp__row">
+          <div class="hp__meta">
+            <strong>{u.name}</strong>
+            <span>{u.note}</span>
+          </div>
+          <div class="hp__bar" role="img" aria-label={`${u.name}: ${u.kw.toFixed(1)} kW output`}>
+            <span class:list={['hp__fill', { 'hp__fill--b': i === 1 }]} style={`width: ${(u.kw / maxKw) * 100}%`}>
+              <b class="num">{u.kw.toFixed(1)} kW</b>
+            </span>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <figcaption>
+    <strong>Same “horsepower”, {diff}% more heating and cooling.</strong> Horsepower can’t tell these two apart, but kW can.
+  </figcaption>
+</figure>
+
+<style>
+  .hp {
+    margin: 2rem 0;
+    padding: clamp(20px, 3vw, 30px);
+    background: var(--white);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+  .hp__k {
+    color: var(--blue-600);
+    margin-bottom: 18px;
+  }
+  .hp__rows {
+    display: grid;
+    gap: 16px;
+  }
+  .hp__row {
+    display: grid;
+    gap: 8px;
+  }
+  @media (min-width: 560px) {
+    .hp__row {
+      grid-template-columns: 150px 1fr;
+      align-items: center;
+      gap: 16px;
+    }
+  }
+  .hp__meta {
+    display: grid;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+  .hp__meta span {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .hp__bar {
+    height: 52px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+  .hp__fill {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    padding-right: 16px;
+    border-radius: 999px;
+    background: var(--blue-100);
+  }
+  .hp__fill--b {
+    background: var(--yellow-400);
+  }
+  .hp__fill b {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--navy-900);
+  }
+  .hp figcaption {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .hp figcaption strong {
+    color: var(--ink);
+  }
+</style>

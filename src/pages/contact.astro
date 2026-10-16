@@ -1,0 +1,284 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import BrandStrip from '../components/BrandStrip.astro';
+import { site } from '../data/site';
+
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const next = [
+  { icon: 'phone', title: 'We call you back', text: 'We’ll be in touch to talk through what you need.' },
+  { icon: 'house', title: 'Free site inspection', text: 'We check your home and design a system that suits it.' },
+  { icon: 'file-text', title: 'Your installed price', text: 'No deposit, no obligation and no hidden costs.' },
+];
+---
+
+<Base
+  title="Contact Us for a Free Quote"
+  description={`Get a free, no-obligation air conditioning quote in Adelaide. Call ${site.phone.display}, email ${site.email} or send your details online.`}
+  breadcrumbs={crumbs}
+>
+  <section class="contact">
+    <div class="container">
+      <div class="contact__panel">
+        <div class="contact__intro">
+          <nav aria-label="Breadcrumb" class="crumbs">
+            <ol>
+              <li><a href="/">Home</a></li>
+              <li><span aria-current="page">Contact</span></li>
+            </ol>
+          </nav>
+          <span class="eyebrow">Free quote · No obligation</span>
+          <h1>Let’s get you a <span class="hl">free quote</span>.</h1>
+          <p class="lede">
+            Do you need air conditioning in Adelaide? Tell us a little about your home and we’ll be in touch. We’d love the
+            chance to help you save on your new system.
+          </p>
+
+          <ul class="contact__methods">
+            <li>
+              <a href={site.phone.href}>
+                <span class="contact__ic"><Icon name="phone" /></span>
+                <span><span class="contact__k">Call us direct</span><span class="contact__v contact__v--big num">{site.phone.display}</span></span>
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${site.email}`}>
+                <span class="contact__ic"><Icon name="mail" /></span>
+                <span><span class="contact__k">Email</span><span class="contact__v">{site.email}</span></span>
+              </a>
+            </li>
+            <li>
+              <a href={site.facebook} rel="noopener" target="_blank">
+                <span class="contact__ic"><Icon name="facebook" /></span>
+                <span><span class="contact__k">Facebook</span><span class="contact__v">Message us<span class="visually-hidden"> (opens in a new tab)</span></span></span>
+              </a>
+            </li>
+            <li>
+              <span class="contact__static">
+                <span class="contact__ic"><Icon name="map-pin" /></span>
+                <span><span class="contact__k">Service area</span><span class="contact__v">{site.address || site.region}</span></span>
+              </span>
+            </li>
+          </ul>
+
+          <Photo name="technicianOutdoorUnit" class="contact__photo" sizes="(min-width: 1040px) 40vw, 100vw" />
+        </div>
+
+        <div class="contact__form">
+          <h2>Request a free quote</h2>
+          <p class="contact__form-sub">It takes about a minute. Fields marked optional can be left blank.</p>
+          <QuoteForm id="contact-quote" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="next-title">
+    <div class="container">
+      <h2 id="next-title" class="next__title">What happens next?</h2>
+      <ol class="next">
+        {
+          next.map((n, i) => (
+            <li>
+              <span class="icon-chip">
+                <Icon name={n.icon} />
+              </span>
+              <div>
+                <p class="next__n">Step {i + 1}</p>
+                <h3>{n.title}</h3>
+                <p>{n.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="next__brands">
+        <BrandStrip />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact {
+    padding-top: clamp(12px, 2vw, 20px);
+  }
+  .contact__panel {
+    display: grid;
+    gap: clamp(28px, 4vw, 48px);
+    padding: clamp(24px, 4vw, 56px);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(900px 420px at 0% 0%, rgb(255 198 41 / 0.18), transparent 60%),
+      linear-gradient(180deg, var(--blue-50), var(--surface));
+  }
+  @media (min-width: 1040px) {
+    .contact__panel {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      align-items: start;
+    }
+  }
+  .crumbs ol {
+    display: flex;
+    gap: 4px 0;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 22px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .crumbs li + li::before {
+    content: '›';
+    margin-inline: 10px;
+    color: #9aa6b8;
+  }
+  .crumbs a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .crumbs [aria-current] {
+    color: var(--ink);
+  }
+  .contact h1 {
+    margin-top: 1.1rem;
+    font-size: clamp(2.6rem, 1.9rem + 3vw, 4.2rem);
+  }
+  .contact .lede {
+    margin-top: 1.1rem;
+  }
+  .contact__methods {
+    display: grid;
+    gap: 10px;
+    margin-top: 2rem;
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 560px) {
+    .contact__methods {
+      grid-template-columns: 1fr 1fr;
+    }
+    .contact__methods li:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+  .contact__methods a,
+  .contact__static {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 100%;
+    padding: 14px 16px;
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    overflow-wrap: anywhere;
+    transition: box-shadow 0.2s ease;
+  }
+  .contact__methods a:hover {
+    box-shadow: var(--shadow);
+  }
+  .contact__methods a > span:last-child,
+  .contact__static > span:last-child {
+    display: grid;
+    line-height: 1.3;
+  }
+  .contact__ic {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--yellow-400);
+    color: var(--navy-900);
+  }
+  .contact__k {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .contact__v {
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .contact__v--big {
+    font-family: var(--font-display);
+    font-size: 2rem;
+  }
+  .contact :global(.contact__photo) {
+    margin-top: 18px;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius-lg);
+  }
+  @media (max-width: 1039px) {
+    .contact :global(.contact__photo) {
+      display: none;
+    }
+  }
+  .contact__form {
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    box-shadow: var(--shadow-lg);
+  }
+  .contact__form h2 {
+    font-size: 2.2rem;
+  }
+  .contact__form-sub {
+    margin: 6px 0 22px;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .next__title {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .next {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 900px) {
+    .next {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .next li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 22px;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .next__n {
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blue-600);
+  }
+  .next h3 {
+    font-size: 1.5rem;
+  }
+  .next li p:last-child {
+    margin-top: 4px;
+    font-size: 0.95rem;
+  }
+  .next__brands {
+    margin-top: clamp(32px, 4vw, 56px);
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+</style>

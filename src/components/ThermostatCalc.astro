@@ -1,0 +1,289 @@
+---
+/**
+ * Interactive version of the "each degree adds about 10%" rule of thumb.
+ * Summer: recommended 24–26°C. Winter: recommended 19–21°C.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+const min = 16;
+const max = 30;
+const ticks = Array.from({ length: (max - min) / 2 + 1 }, (_, i) => min + i * 2);
+---
+
+<figure class="thermo" data-thermo data-season="summer" data-min={min} data-max={max}>
+  <div class="thermo__bar">
+    <p class="label">Try it · thermostat vs running cost</p>
+    <div class="season-switch" role="group" aria-label="Season">
+      <button type="button" aria-pressed="true" data-season-btn="summer"><Icon name="sun" size={18} /> Summer</button>
+      <button type="button" aria-pressed="false" data-season-btn="winter"><Icon name="snowflake" size={18} /> Winter</button>
+    </div>
+  </div>
+
+  <div class="thermo__body">
+    <div class="thermo__dial">
+      <label class="label thermo__k" for={`${id}-range`}>Thermostat set to</label>
+      <output class="thermo__temp num" for={`${id}-range`} data-temp>24°C</output>
+      <div class="thermo__track">
+        <span class="thermo__band" aria-hidden="true"></span>
+        <input type="range" id={`${id}-range`} min={min} max={max} step="1" value="24" data-range aria-describedby={`${id}-rec`} />
+      </div>
+      <div class="thermo__ticks" aria-hidden="true">
+        {ticks.map((t) => <span>{t}°</span>)}
+      </div>
+      <p class="thermo__rec" id={`${id}-rec`}>
+        <span class="only-summer">Recommended for cooling: <strong>24–26°C</strong></span>
+        <span class="only-winter">Recommended for heating: <strong>19–21°C</strong></span>
+      </p>
+    </div>
+
+    <div class="thermo__result" aria-live="polite">
+      <p class="label thermo__k">Extra running cost</p>
+      <p class="thermo__pct num" data-pct>+0%</p>
+      <div class="thermo__meter" aria-hidden="true"><span data-meter></span></div>
+      <p class="thermo__msg" data-msg>In the sweet spot. This is the most efficient range for cooling.</p>
+    </div>
+  </div>
+  <figcaption class="fine thermo__note">
+    A rule of thumb, not a quote: every degree cooler than 24°C in summer, or warmer than 21°C in winter, adds roughly 10% to
+    your running costs.
+  </figcaption>
+</figure>
+
+<style>
+  .thermo {
+    --accent: var(--blue-500);
+    --accent-ink: var(--blue-600);
+    --band-start: 57.1%;
+    --band-end: 71.4%;
+    margin: 2rem 0;
+    background: var(--white);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .thermo[data-season='winter'] {
+    --accent: var(--heat);
+    --accent-ink: var(--heat-ink);
+    --band-start: 21.4%;
+    --band-end: 35.7%;
+  }
+  .thermo[data-season='summer'] .only-winter,
+  .thermo[data-season='winter'] .only-summer {
+    display: none;
+  }
+  .thermo__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+    padding: 12px 14px 12px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+  }
+  .thermo__bar .label {
+    color: var(--blue-600);
+  }
+  .season-switch {
+    display: inline-flex;
+    padding: 4px;
+    gap: 4px;
+    border-radius: 999px;
+    background: var(--surface-2);
+  }
+  .season-switch button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 40px;
+    padding: 6px 16px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    font-weight: 700;
+    font-size: 0.93rem;
+  }
+  .season-switch button[aria-pressed='true'] {
+    background: var(--navy-900);
+    color: var(--white);
+  }
+  .thermo__body {
+    display: grid;
+    gap: 28px;
+    padding: 26px clamp(18px, 3vw, 30px) 20px;
+  }
+  @media (min-width: 640px) {
+    .thermo__body {
+      grid-template-columns: 1.3fr 1fr;
+      gap: 36px;
+    }
+  }
+  .thermo__k {
+    display: block;
+    color: var(--muted);
+  }
+  .thermo__temp,
+  .thermo__pct {
+    display: block;
+    margin: 4px 0 14px;
+    font-family: var(--font-display);
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .thermo__temp {
+    color: var(--accent-ink);
+  }
+  .thermo__pct {
+    color: var(--ink);
+  }
+  .thermo__track {
+    position: relative;
+    height: 36px;
+    display: flex;
+    align-items: center;
+  }
+  .thermo__track::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(to right, var(--blue-500), #b9cde6 45%, #f3c9a2 55%, var(--heat));
+  }
+  .thermo__band {
+    position: absolute;
+    left: var(--band-start);
+    width: calc(var(--band-end) - var(--band-start));
+    height: 24px;
+    border: 2px dashed var(--navy-900);
+    border-radius: 8px;
+    background: rgb(255 255 255 / 0.5);
+    transition: left 0.3s ease;
+  }
+  .thermo input[type='range'] {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    height: 36px;
+    cursor: pointer;
+  }
+  .thermo input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--yellow-400);
+    border: 4px solid var(--white);
+    box-shadow: 0 2px 8px rgb(11 29 58 / 0.35);
+  }
+  .thermo input[type='range']::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--yellow-400);
+    border: 4px solid var(--white);
+    box-shadow: 0 2px 8px rgb(11 29 58 / 0.35);
+  }
+  .thermo input[type='range']::-moz-range-track {
+    background: transparent;
+  }
+  .thermo input[type='range']:focus-visible {
+    outline: none;
+  }
+  .thermo input[type='range']:focus-visible::-webkit-slider-thumb {
+    outline: 3px solid var(--blue-500);
+    outline-offset: 3px;
+  }
+  .thermo__ticks {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .thermo__rec {
+    margin-top: 12px;
+    font-size: 0.95rem;
+  }
+  .thermo__meter {
+    height: 12px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--surface-2);
+  }
+  .thermo__meter span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    transition: width 0.25s ease, background-color 0.25s ease;
+  }
+  .thermo__msg {
+    margin-top: 12px;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .thermo__note {
+    padding: 0 clamp(18px, 3vw, 30px) 22px;
+  }
+</style>
+
+<script>
+  const config = {
+    summer: { start: 24, end: 26, initial: 24, word: 'cooling' },
+    winter: { start: 19, end: 21, initial: 21, word: 'heating' },
+  } as const;
+
+  document.querySelectorAll<HTMLElement>('[data-thermo]').forEach((root) => {
+    const range = root.querySelector<HTMLInputElement>('[data-range]')!;
+    const temp = root.querySelector<HTMLElement>('[data-temp]')!;
+    const pct = root.querySelector<HTMLElement>('[data-pct]')!;
+    const meter = root.querySelector<HTMLElement>('[data-meter]')!;
+    const msg = root.querySelector<HTMLElement>('[data-msg]')!;
+    const buttons = root.querySelectorAll<HTMLButtonElement>('[data-season-btn]');
+
+    const render = () => {
+      const season = root.dataset.season as keyof typeof config;
+      const c = config[season];
+      const t = Number(range.value);
+      const extra = season === 'summer' ? Math.max(0, c.start - t) * 10 : Math.max(0, t - c.end) * 10;
+      temp.textContent = `${t}°C`;
+      range.setAttribute('aria-valuetext', `${t} degrees, about ${extra}% extra running cost`);
+      pct.textContent = `+${extra}%`;
+      meter.style.width = `${Math.min(extra, 100)}%`;
+      const inBand = t >= c.start && t <= c.end;
+      const beyond = season === 'summer' ? t > c.end : t < c.start;
+      msg.textContent = inBand
+        ? `In the sweet spot. This is the most efficient range for ${c.word}.`
+        : beyond
+          ? 'Even cheaper to run, as long as you’re comfortable.'
+          : season === 'summer'
+            ? `Each degree below ${c.start}°C adds about 10%. Try nudging it up.`
+            : `Each degree above ${c.end}°C adds about 10%. Try a jumper first.`;
+    };
+
+    range.addEventListener('input', render);
+    buttons.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const season = btn.dataset.seasonBtn as keyof typeof config;
+        root.dataset.season = season;
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        range.value = String(config[season].initial);
+        render();
+      }),
+    );
+    render();
+  });
+</script>

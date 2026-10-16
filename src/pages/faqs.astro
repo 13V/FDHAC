@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Icon from '../components/Icon.astro';
+import ArticleCards from '../components/ArticleCards.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import { faqs } from '../data/faqs';
+
+const crumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Advice & FAQs', href: '/faqs' },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Base
+  title="Air Conditioning Advice & FAQs"
+  description="Straight answers about ducted reverse cycle air conditioning: prices, deposits, sizing, horsepower vs kW, running costs and maintenance. From a family-owned Adelaide company."
+  breadcrumbs={crumbs}
+  schema={faqSchema}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Advice & FAQs"
+    title="Straight answers about <span class='hl'>air conditioning</span>."
+    lede="Everything we get asked most, plus our guides to running costs, horsepower and maintenance. Can’t find your answer? Call us and you’ll speak with us directly."
+    photo="splitDisplay"
+  >
+    <Fragment slot="actions">
+      <a class="btn btn--primary btn--arrow" href={site.phone.href}><Icon name="phone" /> {site.phone.display} <span class="btn__circle"><Icon name="arrow-up-right" /></span></a>
+      <a class="btn btn--outline" href="/contact">Send a question</a>
+    </Fragment>
+  </PageHero>
+
+  <section class="section" aria-labelledby="guides-title">
+    <div class="container">
+      <SectionHead eyebrow="Guides" id="guides-title" title="Our advice guides." />
+      <ArticleCards />
+    </div>
+  </section>
+
+  <section class="section section--surface" aria-labelledby="faq-title">
+    <div class="container container--narrow">
+      <SectionHead eyebrow="FAQs" id="faq-title" title="Frequently asked questions." center />
+      <FaqList items={faqs} />
+    </div>
+  </section>
+
+  <CtaBand title="Still have a question?" text="Give us a call. We’re happy to help, whether you’re ready for a quote or just want some honest advice." />
+</Base>

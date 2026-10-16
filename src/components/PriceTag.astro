@@ -1,0 +1,74 @@
+---
+/** Floating price badge. */
+import Icon from './Icon.astro';
+
+interface Props {
+  kicker: string;
+  from?: string;
+  price: string;
+  meta?: string;
+  size?: 'md' | 'lg';
+}
+const { kicker, from = 'Fully installed from', price, meta, size = 'md' } = Astro.props;
+---
+
+<div class:list={['ptag', `ptag--${size}`]}>
+  <span class="ptag__icon" aria-hidden="true"><Icon name="badge-check" /></span>
+  <div>
+    <p class="ptag__kicker">{kicker}</p>
+    <p class="ptag__from">{from}</p>
+    <p class="ptag__price price-fig num">{price}<span aria-hidden="true">*</span></p>
+    {meta && <p class="ptag__meta">{meta}</p>}
+  </div>
+</div>
+
+<style>
+  .ptag {
+    display: inline-grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: start;
+    padding: 18px 22px 18px 18px;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+  .ptag__icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--yellow-400);
+    color: var(--navy-900);
+  }
+  .ptag__kicker {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blue-600);
+  }
+  .ptag__from {
+    margin-top: 4px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .ptag__price {
+    font-size: 2.6rem;
+  }
+  .ptag__price span {
+    color: var(--yellow-500);
+    font-size: 0.6em;
+    vertical-align: top;
+  }
+  .ptag--lg .ptag__price {
+    font-size: clamp(3rem, 2.2rem + 2.4vw, 4rem);
+  }
+  .ptag__meta {
+    margin-top: 6px;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+</style>

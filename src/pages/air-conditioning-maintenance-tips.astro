@@ -1,0 +1,81 @@
+---
+import Article from '../layouts/Article.astro';
+import ClearanceDiagram from '../components/ClearanceDiagram.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+const toc = [
+  { id: 'filters', label: 'Clean the indoor filters' },
+  { id: 'outdoor', label: 'Keep the outdoor unit clear' },
+  { id: 'temperature', label: 'Don’t set it too low' },
+  { id: 'warranty', label: 'Maintenance and your warranty' },
+  { id: 'replace', label: 'Replace an old unit' },
+];
+---
+
+<Article
+  title="Air Conditioning Maintenance Tips"
+  description="Simple maintenance tips to keep your reverse cycle air conditioner running efficiently: cleaning filters on split and ducted systems, keeping the outdoor unit clear, and more."
+  crumb="Maintenance tips"
+  heading="Air conditioning maintenance tips."
+  lede="A few simple jobs help your reverse cycle system perform at its best, keep your energy bills down and protect your warranty."
+  photo="technicianGauges"
+  toc={toc}
+>
+  <div class="callout">
+    <Icon name="triangle-alert" />
+    <div>
+      <p><strong>Safety first.</strong> Always switch your air conditioner off completely before opening any cover, to prevent injury or damage to the unit.</p>
+      <p>It’s worth discussing your system’s maintenance needs with your supplier, and reading <a href="/how-to-reduce-air-conditioning-running-costs">how to reduce running costs</a>.</p>
+    </div>
+  </div>
+
+  <h2 id="filters">Clean the filters of the indoor unit</h2>
+  <p>
+    Dirty filters reduce performance because they make the unit work harder, and it can overheat. Research from Canstar Blue
+    found 41% of respondents had never cleaned the filters on their air conditioner. Dust builds up, restricts the airflow and
+    pushes up your energy bills.
+  </p>
+  <h3>Wall-mounted split systems</h3>
+  <p>
+    Lift the front cover and remove the filters, noting how they’re arranged, as some models have extra deodorising or
+    air-purification filters. Clean them the way your owner’s manual describes. Some filters can be rinsed under a tap and
+    some can’t, so check first, and if you use water, let them dry completely before you put them back.
+  </p>
+  <h3>Ducted systems</h3>
+  <p>
+    Find the return air grille, usually in a central spot such as the hallway. Undo the screws holding the grille and carefully
+    remove the filter pad. Clean it the way your manual recommends, and if you use water, make sure it’s completely dry before
+    you put it back.
+  </p>
+
+  <h2 id="outdoor">Keep the outdoor unit free from debris</h2>
+  <p>
+    A build-up of leaves or rubbish on the outdoor unit restricts airflow, so the compressor works harder and your power bills
+    go up. Don’t let plants such as creepers grow into the unit, as they can damage it.
+  </p>
+  <ClearanceDiagram id="maint-clear" />
+  <p>Keep at least <strong>10 cm clear all around</strong> the unit, and around <strong>100 cm clear in front of the fan</strong>.</p>
+
+  <h2 id="temperature">Don’t set the temperature too low</h2>
+  <p>
+    On hot days, setting the coldest temperature won’t cool your home any faster, and it puts extra pressure on your system.
+    For Fujitsu reverse cycle systems, setting the temperature above 23°C is recommended to minimise energy use.
+  </p>
+
+  <h2 id="warranty">Maintenance and your warranty</h2>
+  <p>
+    Warranties only cover manufacturing and design defects or faulty workmanship. If a warranty service call turns out to be
+    caused by poor maintenance, you may be charged for it.
+  </p>
+
+  <h2 id="replace">Save money by replacing an old unit</h2>
+  <p>
+    An old unit can mean much higher energy bills and costly repairs. Replacing your existing ducted system with a new
+    high-efficiency inverter will reduce your bills and save you money every year. See our
+    <a href="/air-conditioning-adelaide/ducted-air-conditioning-replacement-units">ducted replacement units</a>.
+  </p>
+  <p>
+    For more advice on maintaining your reverse cycle system, call us on <a href={site.phone.href}>{site.phone.display}</a>.
+  </p>
+</Article>

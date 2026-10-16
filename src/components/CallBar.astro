@@ -1,0 +1,57 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+---
+
+<nav class="callbar" aria-label="Quick contact">
+  <a class="callbar__call" href={site.phone.href}>
+    <Icon name="phone" size={19} />
+    <span>Call <span class="num">{site.phone.display}</span></span>
+  </a>
+  <a class="callbar__quote" href="/contact">Free quote</a>
+</nav>
+
+<style>
+  .callbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: none;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 8px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: var(--white);
+    border-top: 1px solid var(--line-soft);
+    box-shadow: 0 -12px 30px -18px rgb(11 29 58 / 0.4);
+  }
+  .callbar a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 50px;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.98rem;
+    line-height: 1.1;
+  }
+  .callbar__call {
+    background: var(--yellow-400);
+    color: var(--navy-900);
+  }
+  .callbar__quote {
+    background: var(--navy-900);
+    color: var(--white);
+  }
+  @media (max-width: 1120px) {
+    .callbar {
+      display: grid;
+    }
+  }
+  :global(body.menu-open) .callbar {
+    display: none;
+  }
+</style>

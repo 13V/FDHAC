@@ -1,0 +1,126 @@
+---
+import Icon from './Icon.astro';
+import type { Review } from '../data/reviews';
+
+interface Props {
+  items: Review[];
+  feature?: boolean;
+}
+const { items, feature = false } = Astro.props;
+const initials = (name: string) =>
+  name
+    .split(/[\s&]+/)
+    .filter(Boolean)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+---
+
+<ul class:list={['reviews', { 'reviews--feature': feature }]}>
+  {
+    items.map((r) => (
+      <li class="review">
+        <figure>
+          <p class="review__ctx">{r.context}</p>
+          <blockquote>
+            <p class="review__pull">“{r.pull}”</p>
+            <p class="review__text">{r.text}</p>
+          </blockquote>
+          <figcaption>
+            <span class="review__avatar" aria-hidden="true">
+              {initials(r.name)}
+            </span>
+            <span class="review__name">{r.name}</span>
+            <Icon name="quote" size={30} class="review__mark" />
+          </figcaption>
+        </figure>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .reviews {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 18px;
+  }
+  @media (min-width: 900px) {
+    .reviews {
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    }
+  }
+  .review figure {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: clamp(22px, 2.4vw, 30px);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+  }
+  .review__ctx {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--blue-600);
+  }
+  .review blockquote {
+    flex: 1;
+    margin-top: 14px;
+  }
+  .review__pull {
+    font-family: var(--font-display);
+    font-size: 1.65rem;
+    font-weight: 600;
+    line-height: 1.12;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .review__text {
+    margin-top: 12px;
+    font-size: 0.96rem;
+  }
+  .review figcaption {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .review__avatar {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--navy-900);
+    color: var(--yellow-400);
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 0.03em;
+  }
+  .review__name {
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .review :global(.review__mark) {
+    margin-left: auto;
+    color: var(--yellow-400);
+    fill: var(--yellow-400);
+  }
+  .reviews--feature .review figure {
+    background: var(--white);
+    box-shadow: var(--shadow);
+  }
+  .reviews--feature .review__pull {
+    font-size: clamp(1.8rem, 1.4rem + 1.4vw, 2.5rem);
+  }
+  .reviews--feature .review__text {
+    font-size: 1.05rem;
+    max-width: 72ch;
+  }
+</style>

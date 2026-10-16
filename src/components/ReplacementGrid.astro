@@ -1,0 +1,104 @@
+---
+/** Changeover prices for replacing an existing ducted system. */
+import { replacements, formatPrice } from '../data/prices';
+---
+
+<ol class="rgrid">
+  {
+    replacements.map((r, i) => (
+      <li class="rgrid__item">
+        <span class="rgrid__opt">Option {i + 1}</span>
+        <span class="rgrid__kw price-fig">
+          <span class="num">{r.kw}</span> kW
+        </span>
+        <span class="rgrid__desc">Samsung ducted high-efficiency inverter</span>
+        <span class="rgrid__price">
+          <span class="rgrid__from">Fully installed from</span>
+          <span class="price-fig num rgrid__amount">
+            {formatPrice(r.price)}
+            <sup>*</sup>
+          </span>
+        </span>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .rgrid {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  }
+  .rgrid__item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      'opt opt'
+      'kw price'
+      'desc price';
+    gap: 4px 18px;
+    align-items: end;
+    padding: 20px 22px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  }
+  .rgrid__item:hover {
+    border-color: transparent;
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+  .rgrid__opt {
+    grid-area: opt;
+    justify-self: start;
+    margin-bottom: 10px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--blue-50);
+    color: var(--blue-600);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .rgrid__kw {
+    grid-area: kw;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  .rgrid__kw .num {
+    font-size: 2.6rem;
+    font-weight: 700;
+  }
+  .rgrid__desc {
+    grid-area: desc;
+    font-size: 0.86rem;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .rgrid__price {
+    grid-area: price;
+    display: grid;
+    justify-items: end;
+    text-align: right;
+  }
+  .rgrid__from {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--muted);
+    line-height: 1.2;
+    max-width: 10ch;
+  }
+  .rgrid__amount {
+    font-size: 2rem;
+    margin-top: 4px;
+  }
+  .rgrid__amount sup {
+    font-size: 0.5em;
+    color: var(--yellow-500);
+  }
+</style>

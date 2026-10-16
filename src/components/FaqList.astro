@@ -1,0 +1,90 @@
+---
+import Icon from './Icon.astro';
+import type { Faq } from '../data/faqs';
+
+interface Props {
+  items: Faq[];
+}
+const { items } = Astro.props;
+---
+
+<div class="faqs">
+  {
+    items.map((f, i) => (
+      <details class="faq" open={i === 0}>
+        <summary>
+          <span>{f.q}</span>
+          <span class="faq__icon" aria-hidden="true">
+            <Icon name="chevron-down" size={20} />
+          </span>
+        </summary>
+        <div class="faq__body">
+          <p>{f.a}</p>
+          {f.link && (
+            <a class="text-link" href={f.link.href}>
+              {f.link.label}
+              <span class="icon-btn">
+                <Icon name="arrow-right" />
+              </span>
+            </a>
+          )}
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faqs {
+    display: grid;
+    gap: 12px;
+  }
+  .faq {
+    background: var(--white);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s ease;
+  }
+  .faq[open] {
+    box-shadow: var(--shadow);
+  }
+  .faq summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 20px 18px 24px;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 700;
+    font-size: 1.04rem;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq__icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--navy-900);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+  .faq[open] .faq__icon {
+    transform: rotate(180deg);
+    background: var(--yellow-400);
+  }
+  .faq__body {
+    padding: 0 24px 22px;
+    max-width: 70ch;
+  }
+  .faq__body .text-link {
+    margin-top: 12px;
+  }
+</style>

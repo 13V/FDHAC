@@ -1,0 +1,23 @@
+---
+/** Eyebrow pill + heading + optional lede. `title` may contain simple inline HTML (our own copy only). */
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+  center?: boolean;
+  row?: boolean;
+  id?: string;
+  level?: 'h2' | 'h3';
+}
+const { eyebrow, title, lede, center = false, row = false, id, level = 'h2' } = Astro.props;
+const Tag = level;
+---
+
+<div class:list={['section-head', { 'section-head--center': center, 'section-head--row': row }]}>
+  <div>
+    <span class="eyebrow">{eyebrow}</span>
+    <Tag id={id} set:html={title} />
+    {lede && <p class="lede">{lede}</p>}
+  </div>
+  <slot />
+</div>

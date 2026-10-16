@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+---
+
+<Base title="Thanks for your enquiry" description="Thanks, we’ve received your quote request." noindex>
+  <section class="ty">
+    <div class="container">
+      <div class="ty__panel">
+        <span class="ty__icon"><Icon name="circle-check" size={40} /></span>
+        <h1>Thanks, we’ve got your request.</h1>
+        <p class="lede">We’ll be in touch soon to arrange your free site inspection. Need us sooner? Call us directly.</p>
+        <div class="btn-row ty__actions">
+          <a class="btn btn--primary" href={site.phone.href}><Icon name="phone" /> {site.phone.display}</a>
+          <a class="btn btn--outline" href="/price-list">Browse our prices</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .ty {
+    padding-block: clamp(12px, 2vw, 20px) var(--section);
+  }
+  .ty__panel {
+    padding: clamp(32px, 6vw, 88px);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, var(--blue-50), var(--surface));
+    text-align: center;
+  }
+  .ty__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: var(--yellow-400);
+    color: var(--navy-900);
+  }
+  .ty h1 {
+    margin-top: 1.4rem;
+    font-size: clamp(2.2rem, 1.7rem + 2.4vw, 3.6rem);
+  }
+  .ty .lede {
+    margin: 1rem auto 0;
+  }
+  .ty__actions {
+    justify-content: center;
+    margin-top: 2rem;
+  }
+</style>

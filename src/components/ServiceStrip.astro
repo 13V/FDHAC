@@ -1,0 +1,77 @@
+---
+import Icon from './Icon.astro';
+
+const items = [
+  { icon: 'house', label: 'Ducted reverse cycle', href: '/ducted-reverse-cycle-air-conditioners' },
+  { icon: 'recycle', label: 'Replacement units', href: '/air-conditioning-adelaide/ducted-air-conditioning-replacement-units' },
+  { icon: 'wind', label: 'Split systems', href: '/home-air-conditioning-adelaide#split-systems' },
+  { icon: 'flame', label: 'Home heating', href: '/heating-your-home' },
+  { icon: 'ruler', label: 'Free system design', href: '/contact' },
+];
+---
+
+<nav class="sstrip" aria-label="Services">
+  <ul>
+    {
+      items.map((i) => (
+        <li>
+          <a href={i.href}>
+            <Icon name={i.icon} size={20} />
+            {i.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .sstrip ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0;
+    border-block: 1px solid var(--line);
+  }
+  .sstrip li {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+  }
+  .sstrip li + li {
+    border-left: 1px solid var(--line);
+  }
+  .sstrip a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 18px;
+    font-weight: 650;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .sstrip a :global(svg) {
+    color: var(--blue-600);
+  }
+  .sstrip a:hover {
+    color: var(--blue-600);
+  }
+  @media (max-width: 900px) {
+    .sstrip ul {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      scrollbar-width: none;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+    }
+    .sstrip ul::-webkit-scrollbar {
+      display: none;
+    }
+    .sstrip li {
+      flex: none;
+    }
+  }
+</style>

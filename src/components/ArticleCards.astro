@@ -1,0 +1,107 @@
+---
+import Icon from './Icon.astro';
+import Photo from './Photo.astro';
+import { articles } from '../data/articles';
+
+interface Props {
+  exclude?: string;
+}
+const { exclude } = Astro.props;
+const list = articles.filter((a) => a.href !== exclude);
+---
+
+<ul class="acards">
+  {
+    list.map((a) => (
+      <li>
+        <a class="acard" href={a.href}>
+          <Photo name={a.photo} class="acard__photo" sizes="(min-width: 1040px) 33vw, (min-width: 700px) 50vw, 100vw" widths={[480, 720, 960]} />
+          <div class="acard__body">
+            <span class="acard__tag">{a.tag}</span>
+            <h3>{a.title}</h3>
+            <p>{a.text}</p>
+            <span class="text-link">
+              Read the guide
+              <span class="icon-btn">
+                <Icon name="arrow-up-right" />
+              </span>
+            </span>
+          </div>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .acards {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+  }
+  @media (min-width: 760px) {
+    .acards {
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    }
+  }
+  .acard {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--white);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .acard:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-3px);
+  }
+  .acard :global(.acard__photo) {
+    aspect-ratio: 16 / 10;
+    border-radius: 0;
+  }
+  .acard :global(.acard__photo img) {
+    transition: transform 0.5s ease;
+  }
+  .acard:hover :global(.acard__photo img) {
+    transform: scale(1.04);
+  }
+  .acard__body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    padding: 22px 24px 24px;
+  }
+  .acard__tag {
+    align-self: flex-start;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--yellow-100);
+    color: var(--ink);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .acard h3 {
+    font-size: 1.6rem;
+  }
+  .acard p {
+    flex: 1;
+    font-size: 0.96rem;
+  }
+  .acard .text-link {
+    margin-top: 6px;
+  }
+  .acard:hover .text-link .icon-btn {
+    background: var(--yellow-400);
+    border-color: var(--yellow-400);
+    transform: rotate(-45deg);
+  }
+</style>

@@ -1,0 +1,862 @@
+---
+/**
+ * Cutaway of a home with ducted reverse cycle air conditioning.
+ *  - Cooling / heating switch (shows what "reverse cycle" means)
+ *  - `annotated`: numbered callouts + legend explaining each part
+ *  - `zones`: zone on/off switches with a heat-load meter
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  id: string;
+  annotated?: boolean;
+  zones?: boolean;
+  mode?: 'cool' | 'heat';
+  class?: string;
+}
+
+const { id, annotated = false, zones = false, mode = 'cool', class: className } = Astro.props;
+
+// Insulation batts drawn as a soft wave along the ceiling.
+let insulation = 'M92 259';
+for (let x = 92; x < 566; x += 12) insulation += ' q6 -8 12 0';
+
+const markers = [
+  { n: 1, x: 684, y: 360, label: 'Outdoor unit', text: 'Moves heat out of your home in summer and pumps it in during winter.' },
+  { n: 2, x: 604, y: 318, label: 'Refrigerant pipes', text: 'Connect the outdoor unit to the indoor unit in your roof.' },
+  { n: 3, x: 330, y: 192, label: 'Indoor fan coil unit', text: 'Sits out of sight in the roof space and blows conditioned air through the ducts.' },
+  { n: 4, x: 424, y: 202, label: 'Insulated ducting', text: 'Carries the air to every room on the system.' },
+  { n: 5, x: 257, y: 197, label: 'Zone motors', text: 'Open and close to switch areas of the house on or off.' },
+  { n: 6, x: 176, y: 282, label: 'Ceiling outlets', text: 'Supply air, usually about 10°C cooler or warmer than the air drawn in.' },
+  { n: 7, x: 380, y: 286, label: 'Return air grille', text: 'A central grille draws air back to the unit through a filter.' },
+  { n: 8, x: 129, y: 378, label: 'Wall controller', text: 'Set the temperature and choose which zones are running.' },
+];
+---
+
+<figure class:list={['house', className]} data-house data-mode={mode} data-z1="on" data-z2="on" data-annotated={annotated ? '' : undefined}>
+  <div class="house__bar">
+    <span class="label house__kicker">Reverse cycle · ducted</span>
+    <div class="mode-switch" role="group" aria-label="Show the system">
+      <button type="button" aria-pressed={mode === 'cool' ? 'true' : 'false'} data-mode-btn="cool">
+        <Icon name="snowflake" size={18} /> Cooling
+      </button>
+      <button type="button" aria-pressed={mode === 'heat' ? 'true' : 'false'} data-mode-btn="heat">
+        <Icon name="flame" size={18} /> Heating
+      </button>
+    </div>
+  </div>
+
+  <div class="house__canvas">
+    <svg viewBox="0 0 720 480" role="img" aria-labelledby={`${id}-t ${id}-d`} xmlns="http://www.w3.org/2000/svg">
+      <title id={`${id}-t`}>Ducted reverse cycle air conditioning in a home</title>
+      <desc id={`${id}-d`}>
+        Cutaway of a house. An outdoor unit beside the house is connected by refrigerant pipes to an indoor unit in the roof
+        space. Ducts carry air from the indoor unit to ceiling outlets in the living area (zone 1) and the bedroom (zone 2).
+        Air flows back to the unit through a return air grille in the hallway ceiling.
+      </desc>
+      <defs>
+        <pattern id={`${id}-hatch`} width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="9" class="hatch-line"></line>
+        </pattern>
+        <clipPath id={`${id}-roof-clip`}>
+          <polygon points="94,262 330,122 566,262"></polygon>
+        </clipPath>
+        <marker id={`${id}-arrow`} viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto">
+          <path d="M1 1 L9 5 L1 9 Z" class="arrow-mode"></path>
+        </marker>
+        <marker id={`${id}-arrow-r`} viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto">
+          <path d="M1 1 L9 5 L1 9 Z" class="arrow-return"></path>
+        </marker>
+      </defs>
+
+      <!-- Sky readouts -->
+      <g class="readout">
+        <text x="24" y="44" class="ro-k">Inside</text>
+        <text x="22" y="92" class="ro-v ro-v--in only-cool">24°C</text>
+        <text x="22" y="92" class="ro-v ro-v--in only-heat">21°C</text>
+        <text x="24" y="116" class="ro-s only-cool">Cooling</text>
+        <text x="24" y="116" class="ro-s only-heat">Heating</text>
+      </g>
+      <g class="readout">
+        <text x="696" y="44" text-anchor="end" class="ro-k">Outside · Adelaide</text>
+        <text x="698" y="92" text-anchor="end" class="ro-v only-cool">38°C</text>
+        <text x="698" y="92" text-anchor="end" class="ro-v only-heat">7°C</text>
+        <text x="696" y="116" text-anchor="end" class="ro-s ro-s--out only-cool">Summer afternoon</text>
+        <text x="696" y="116" text-anchor="end" class="ro-s ro-s--out only-heat">Winter morning</text>
+      </g>
+      <g class="sun only-cool" transform="translate(548 74)">
+        <circle r="13"></circle>
+        <path d="M0 -24v6 M0 18v6 M-24 0h6 M18 0h6 M-17 -17l4.2 4.2 M12.8 12.8l4.2 4.2 M-17 17l4.2 -4.2 M12.8 -12.8l4.2 -4.2"></path>
+      </g>
+      <g class="moon only-heat" transform="translate(604 74)">
+        <path d="M6 -15 A 16 16 0 1 0 15 8 A 12.5 12.5 0 1 1 6 -15 Z"></path>
+        <path d="M-30 -14 l1.6 3.4 3.4 1.6 -3.4 1.6 -1.6 3.4 -1.6 -3.4 -3.4 -1.6 3.4 -1.6 Z M-22 10 l1 2.2 2.2 1 -2.2 1 -1 2.2 -1 -2.2 -2.2 -1 2.2 -1 Z" class="star"></path>
+      </g>
+
+      <!-- Ground -->
+      <rect x="0" y="452" width="720" height="24" fill={`url(#${id}-hatch)`}></rect>
+      <line x1="0" y1="452" x2="720" y2="452" class="ground"></line>
+
+      <!-- Roof space -->
+      <polygon points="94,262 330,122 566,262" class="roofspace"></polygon>
+      <path d={insulation} class="insulation" clip-path={`url(#${id}-roof-clip)`}></path>
+
+      <!-- Rooms -->
+      <rect x="96" y="262" width="468" height="190" class="rooms"></rect>
+      <rect x="99" y="265" width="198" height="187" class="tint tint--z1"></rect>
+      <rect x="303" y="265" width="54" height="187" class="tint tint--hall"></rect>
+      <rect x="363" y="265" width="198" height="187" class="tint tint--z2"></rect>
+
+      <!-- Furniture -->
+      <g class="furniture">
+        <path d="M120 404 a8 8 0 0 1 8 -8 h86 a8 8 0 0 1 8 8 v12 h-102 Z" class="furn"></path>
+        <path d="M110 418 a7 7 0 0 1 14 0 v4 h92 v-4 a7 7 0 0 1 14 0 v26 h-120 Z" class="furn"></path>
+        <path d="M118 444 v8 M222 444 v8" class="furn-leg"></path>
+        <rect x="248" y="424" width="26" height="28" rx="2" class="furn"></rect>
+        <path d="M261 424 V398" class="furn-leg"></path>
+        <path d="M250 398 L254 384 H268 L272 398 Z" class="lamp"></path>
+
+        <rect x="540" y="394" width="10" height="58" rx="2" class="ink-fill"></rect>
+        <rect x="406" y="424" width="134" height="20" rx="4" class="furn furn--white"></rect>
+        <rect x="406" y="444" width="134" height="8" class="furn"></rect>
+        <path d="M406 428 a4 4 0 0 1 4 -4 h84 v20 h-88 Z" class="blanket"></path>
+        <rect x="503" y="412" width="32" height="13" rx="6.5" class="furn furn--white"></rect>
+      </g>
+
+      <!-- Wall controller -->
+      <rect x="112" y="320" width="34" height="42" rx="5" class="controller"></rect>
+      <text x="129" y="347" text-anchor="middle" class="controller-text only-cool">24</text>
+      <text x="129" y="347" text-anchor="middle" class="controller-text only-heat">21</text>
+
+      <!-- Zone tags -->
+      <g class="zone-tag zone-tag--z1">
+        <text x="110" y="292" class="tag-k">Zone 1</text>
+        <text x="110" y="309" class="tag-v">Living</text>
+      </g>
+      <g class="zone-tag zone-tag--z2">
+        <text x="550" y="292" text-anchor="end" class="tag-k">Zone 2</text>
+        <text x="550" y="309" text-anchor="end" class="tag-v">Bedroom</text>
+      </g>
+
+      <!-- Supply airflow -->
+      <g class="flow flow--z1">
+        <path d="M202 278 C 192 304, 174 324, 162 350" marker-end={`url(#${id}-arrow)`}></path>
+        <path d="M210 280 V 358" marker-end={`url(#${id}-arrow)`}></path>
+        <path d="M218 278 C 228 304, 246 324, 258 350" marker-end={`url(#${id}-arrow)`}></path>
+      </g>
+      <g class="flow flow--z2">
+        <path d="M442 278 C 432 304, 414 324, 402 350" marker-end={`url(#${id}-arrow)`}></path>
+        <path d="M450 280 V 358" marker-end={`url(#${id}-arrow)`}></path>
+        <path d="M458 278 C 468 304, 486 324, 498 350" marker-end={`url(#${id}-arrow)`}></path>
+      </g>
+
+      <!-- Return air -->
+      <g class="return">
+        <path class="return--z1" d="M236 430 C 274 430, 300 412, 313 384 C 321 362, 324 326, 325 288" marker-end={`url(#${id}-arrow-r)`}></path>
+        <path class="return--z2" d="M424 430 C 386 430, 360 412, 347 384 C 339 362, 336 326, 335 288" marker-end={`url(#${id}-arrow-r)`}></path>
+      </g>
+
+      <!-- Walls -->
+      <path d="M96 452 V262 H564 V452" class="wall"></path>
+      <rect x="297" y="262" width="6" height="42" class="ink-fill"></rect>
+      <rect x="357" y="262" width="6" height="42" class="ink-fill"></rect>
+
+      <!-- Refrigerant pipes -->
+      <path d="M598 396 H584 V272 Q584 254 566 254 H402 Q390 254 389 244 V238 H377" class="pipe-outline"></path>
+      <path d="M598 396 H584 V272 Q584 254 566 254 H402 Q390 254 389 244 V238 H377" class="pipe-body"></path>
+
+      <!-- Ducts -->
+      <g class="duct duct--z1">
+        <path d="M288 222 C 252 222, 210 214, 210 265" class="duct-outline"></path>
+        <path d="M288 222 C 252 222, 210 214, 210 265" class="duct-body"></path>
+        <path d="M288 222 C 252 222, 210 214, 210 265" class="duct-ribs"></path>
+      </g>
+      <g class="duct duct--z2">
+        <path d="M372 222 C 408 222, 450 214, 450 265" class="duct-outline"></path>
+        <path d="M372 222 C 408 222, 450 214, 450 265" class="duct-body"></path>
+        <path d="M372 222 C 408 222, 450 214, 450 265" class="duct-ribs"></path>
+      </g>
+      <rect x="250" y="214" width="14" height="14" rx="2" class="damper damper--z1"></rect>
+      <rect x="396" y="214" width="14" height="14" rx="2" class="damper damper--z2"></rect>
+
+      <!-- Indoor unit -->
+      <rect x="314" y="244" width="32" height="20" class="duct-plenum"></rect>
+      <rect x="284" y="206" width="92" height="40" rx="3" class="unit"></rect>
+      <circle cx="307" cy="226" r="12" class="unit-fan"></circle>
+      <g class="spin spin--indoor" style="transform-origin: 307px 226px">
+        <path d="M307 226 C 303 219, 304 215, 309 215 C 311 219, 310 223, 307 226 Z M307 226 C 315 226, 317 229, 315 233 C 311 233, 309 230, 307 226 Z M307 226 C 303 233, 299 234, 297 230 C 299 227, 303 226, 307 226 Z" class="blade"></path>
+      </g>
+      <path d="M332 213 V239 M338 213 V239 M344 213 V239 M350 213 V239 M356 213 V239 M362 213 V239 M368 213 V239" class="coil"></path>
+
+      <!-- Return grille + outlets -->
+      <rect x="306" y="262" width="48" height="8" rx="1.5" class="grille"></rect>
+      <path d="M312 263v6 M318 263v6 M324 263v6 M330 263v6 M336 263v6 M342 263v6 M348 263v6" class="grille-slats"></path>
+      <rect x="190" y="262" width="40" height="8" rx="1.5" class="outlet"></rect>
+      <rect x="430" y="262" width="40" height="8" rx="1.5" class="outlet"></rect>
+      <path d="M198 266h24 M438 266h24" class="outlet-slot"></path>
+
+      <!-- Outdoor unit -->
+      <rect x="590" y="446" width="112" height="6" class="slab"></rect>
+      <rect x="598" y="372" width="96" height="74" rx="3" class="unit"></rect>
+      <circle cx="633" cy="409" r="26" class="fan-guard"></circle>
+      <circle cx="633" cy="409" r="18" class="fan-ring"></circle>
+      <g class="spin spin--outdoor" style="transform-origin: 633px 409px">
+        <path d="M633 409 C 626 399, 627 391, 636 390 C 641 397, 639 404, 633 409 Z M633 409 C 645 408, 650 414, 645 421 C 637 421, 634 415, 633 409 Z M633 409 C 628 420, 621 423, 617 415 C 621 409, 627 408, 633 409 Z" class="blade"></path>
+      </g>
+      <circle cx="633" cy="409" r="3.5" class="ink-fill"></circle>
+      <path d="M668 382 V436 M674 382 V436 M680 382 V436 M686 382 V436" class="fins"></path>
+
+      <!-- Roof (drawn last so pipes appear to pass through the eave) -->
+      <polyline points="50,281 330,116 610,281" class="roof"></polyline>
+
+      {
+        annotated &&
+          markers.map((m) => (
+            <g class="marker">
+              <circle cx={m.x} cy={m.y} r="12" />
+              <text x={m.x} y={m.y + 4.5} text-anchor="middle">
+                {m.n}
+              </text>
+            </g>
+          ))
+      }
+    </svg>
+  </div>
+
+  {
+    zones && (
+      <div class="house__zones">
+        <div class="zone-toggles" role="group" aria-label="Zones">
+          <button type="button" class="zone-btn" aria-pressed="true" data-zone="z1">
+            <span class="zone-btn__sw" aria-hidden="true" />
+            Zone 1 · Living
+          </button>
+          <button type="button" class="zone-btn" aria-pressed="true" data-zone="z2">
+            <span class="zone-btn__sw" aria-hidden="true" />
+            Zone 2 · Bedroom
+          </button>
+        </div>
+        <div class="load">
+          <div class="load__head">
+            <span>Heat load on the system</span>
+            <strong class="num" data-load-value>
+              100%
+            </strong>
+          </div>
+          <div class="load__bar">
+            <span data-load-bar />
+          </div>
+          <p class="fine">
+            Living areas typically make up about two-thirds of a home’s heat load. Zoning lets a smaller unit do the job, so it
+            costs less to buy and to run.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  <figcaption class="house__caption">
+    <span class="only-cool"><strong>Summer:</strong> the system pulls heat out of your home. Set it to 24–26°C for the lowest running costs.</span>
+    <span class="only-heat"><strong>Winter:</strong> the same system runs in reverse and pumps heat in. Set it to 19–21°C for the lowest running costs.</span>
+  </figcaption>
+  <p class="visually-hidden" aria-live="polite" data-house-status></p>
+
+  {
+    annotated && (
+      <ol class="house__legend">
+        {markers.map((m) => (
+          <li>
+            <span class="house__legend-n" aria-hidden="true">
+              {m.n}
+            </span>
+            <span>
+              <strong>{m.label}.</strong> {m.text}
+            </span>
+          </li>
+        ))}
+      </ol>
+    )
+  }
+</figure>
+
+<style>
+  .house {
+    --mode: var(--cool);
+    --mode-ink: var(--cool-ink);
+    --mode-tint: var(--cool-tint);
+    --mode-dark: var(--cool-on-dark);
+    position: relative;
+    margin: 0;
+    background: var(--white);
+    border: var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-hard);
+    overflow: hidden;
+  }
+  .house[data-mode='heat'] {
+    --mode: var(--heat);
+    --mode-ink: var(--heat-ink);
+    --mode-tint: var(--heat-tint);
+    --mode-dark: var(--heat-on-dark);
+  }
+
+  .house__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+    padding: 12px 14px 12px 20px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .house__kicker {
+    color: var(--ink-soft);
+  }
+  .mode-switch {
+    display: inline-flex;
+    padding: 4px;
+    gap: 4px;
+    border-radius: 999px;
+    background: var(--surface-2);
+  }
+  .mode-switch button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 40px;
+    padding: 6px 16px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    font-weight: 700;
+    font-size: 0.93rem;
+    color: var(--ink);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .mode-switch button:hover {
+    background: rgb(255 255 255 / 0.6);
+  }
+  .mode-switch button[aria-pressed='true'] {
+    background: var(--navy-900);
+    color: var(--white);
+  }
+  .mode-switch button[data-mode-btn='cool'][aria-pressed='true'] :global(svg) {
+    color: var(--cool-on-dark);
+  }
+  .mode-switch button[data-mode-btn='heat'][aria-pressed='true'] :global(svg) {
+    color: var(--heat-on-dark);
+  }
+
+  .house__canvas {
+    background: linear-gradient(180deg, #f7faff, #ffffff);
+    padding: 6px 4px 0;
+  }
+  .house__canvas svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Mode-dependent visibility */
+  .house[data-mode='cool'] .only-heat,
+  .house[data-mode='heat'] .only-cool {
+    display: none;
+  }
+
+  /* SVG styling */
+  svg text {
+    font-family: var(--font-sans);
+  }
+  .ro-k {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    fill: var(--ink-soft);
+  }
+  .ro-v {
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: 700;
+    fill: var(--ink);
+  }
+  .ro-v--in {
+    fill: var(--mode-ink);
+    transition: fill 0.35s ease;
+  }
+  .ro-s {
+    font-size: 15px;
+    font-weight: 700;
+    fill: var(--mode-ink);
+  }
+  .ro-s--out {
+    fill: var(--ink-soft);
+    font-weight: 600;
+  }
+  .sun circle {
+    fill: var(--heat);
+  }
+  .sun path {
+    stroke: var(--heat);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+  .moon path {
+    fill: var(--cool-tint);
+    stroke: var(--cool-ink);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+  .moon .star {
+    fill: var(--cool);
+    stroke: none;
+  }
+
+  .hatch-line {
+    stroke: var(--ink);
+    stroke-width: 1.2;
+    opacity: 0.28;
+  }
+  .ground {
+    stroke: var(--ink);
+    stroke-width: 3;
+  }
+  .roofspace {
+    fill: #edf2f9;
+  }
+  .insulation {
+    fill: none;
+    stroke: #e9c46a;
+    stroke-width: 6;
+    stroke-linecap: round;
+    opacity: 0.55;
+  }
+  .rooms {
+    fill: var(--white);
+  }
+  .tint {
+    fill: var(--mode);
+    opacity: 0.09;
+    transition: fill 0.35s ease, opacity 0.35s ease;
+  }
+  .wall {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 5;
+    stroke-linejoin: miter;
+  }
+  .roof {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 12;
+    stroke-linejoin: miter;
+    stroke-linecap: square;
+  }
+  .ink-fill {
+    fill: var(--ink);
+  }
+
+  .furn {
+    fill: var(--paper-3);
+    stroke: var(--ink);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+  .furn--white {
+    fill: var(--white);
+  }
+  .furn-leg {
+    stroke: var(--ink);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+  .lamp {
+    fill: #f6d58a;
+    stroke: var(--ink);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+  .blanket {
+    fill: var(--mode-tint);
+    stroke: var(--ink);
+    stroke-width: 2;
+    transition: fill 0.35s ease;
+  }
+
+  .controller {
+    fill: var(--ink);
+  }
+  .controller-text {
+    font-size: 15px;
+    font-weight: 700;
+    fill: var(--mode-dark);
+  }
+
+  .tag-k {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    fill: var(--mode-ink);
+    transition: fill 0.35s ease;
+  }
+  .tag-v {
+    font-size: 14px;
+    font-weight: 700;
+    fill: var(--ink);
+  }
+
+  .flow path {
+    fill: none;
+    stroke: var(--mode);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 7 7;
+    transition: stroke 0.35s ease, opacity 0.35s ease;
+  }
+  .arrow-mode {
+    fill: var(--mode);
+    transition: fill 0.35s ease;
+  }
+  .return path {
+    fill: none;
+    stroke: var(--ink-mute);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 3 7;
+    opacity: 0.6;
+    transition: opacity 0.35s ease;
+  }
+  .arrow-return {
+    fill: var(--ink-mute);
+  }
+
+  .pipe-outline {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 8;
+    stroke-linejoin: round;
+  }
+  .pipe-body {
+    fill: none;
+    stroke: #cfd6de;
+    stroke-width: 4;
+    stroke-linejoin: round;
+  }
+
+  .duct-outline {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 17;
+  }
+  .duct-body {
+    fill: none;
+    stroke: #e6e9ed;
+    stroke-width: 12;
+  }
+  .duct-ribs {
+    fill: none;
+    stroke: #aab4c0;
+    stroke-width: 12;
+    stroke-dasharray: 1.6 4.4;
+  }
+  .duct-plenum {
+    fill: #e6e9ed;
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+  .damper {
+    fill: var(--ink);
+    stroke: var(--white);
+    stroke-width: 1.5;
+    transition: fill 0.3s ease;
+  }
+
+  .unit {
+    fill: var(--white);
+    stroke: var(--ink);
+    stroke-width: 3;
+  }
+  .unit-fan {
+    fill: var(--paper-2);
+    stroke: var(--ink);
+    stroke-width: 2;
+  }
+  .blade {
+    fill: var(--ink);
+  }
+  .coil,
+  .fins {
+    stroke: var(--ink);
+    stroke-width: 1.6;
+    opacity: 0.7;
+  }
+  .grille,
+  .outlet {
+    fill: var(--white);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+  .grille-slats {
+    stroke: var(--ink);
+    stroke-width: 1.4;
+  }
+  .outlet-slot {
+    stroke: var(--mode);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    transition: stroke 0.35s ease;
+  }
+  .slab {
+    fill: var(--paper-3);
+    stroke: var(--ink);
+    stroke-width: 2;
+  }
+  .fan-guard {
+    fill: var(--paper-2);
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+  .fan-ring {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.2;
+    opacity: 0.6;
+  }
+
+  .marker circle {
+    fill: var(--yellow-400);
+    stroke: var(--navy-900);
+    stroke-width: 2;
+  }
+  .marker text {
+    font-size: 13px;
+    font-weight: 800;
+    fill: var(--ink);
+  }
+
+  /* Zones off */
+  .house[data-z1='off'] .flow--z1,
+  .house[data-z2='off'] .flow--z2,
+  .house[data-z1='off'] .return--z1,
+  .house[data-z2='off'] .return--z2 {
+    opacity: 0;
+  }
+  .tint--hall {
+    opacity: 0.045;
+  }
+  .house[data-z1='off'] .tint--z1,
+  .house[data-z2='off'] .tint--z2,
+  .house[data-z1='off'][data-z2='off'] .tint--hall {
+    opacity: 0;
+  }
+  .house[data-z1='off'] .damper--z1,
+  .house[data-z2='off'] .damper--z2 {
+    fill: #b42318;
+  }
+  .house[data-z1='off'] .zone-tag--z1 .tag-k,
+  .house[data-z2='off'] .zone-tag--z2 .tag-k {
+    fill: var(--ink-mute);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .flow path {
+      animation: flow 1.1s linear infinite;
+    }
+    .return path {
+      animation: flow 1.6s linear infinite;
+    }
+    .spin {
+      animation: spin 1.4s linear infinite;
+    }
+    .spin--indoor {
+      animation-duration: 1s;
+    }
+    .house[data-z1='off'][data-z2='off'] .spin {
+      animation-play-state: paused;
+    }
+  }
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -28;
+    }
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .house__caption {
+    padding: 14px 18px 16px;
+    border-top: 1px solid var(--line);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    background: var(--white);
+  }
+  .house__caption strong {
+    color: var(--mode-ink);
+  }
+
+  /* Zone controls */
+  .house__zones {
+    display: grid;
+    gap: 16px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+  }
+  @media (min-width: 720px) {
+    .house__zones {
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 24px;
+    }
+  }
+  .zone-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .zone-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 6px 16px 6px 8px;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: var(--white);
+    font-weight: 700;
+    font-size: 0.93rem;
+  }
+  .zone-btn__sw {
+    position: relative;
+    width: 36px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--paper-3);
+    transition: background-color 0.2s ease;
+  }
+  .zone-btn__sw::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+    transition: transform 0.2s ease;
+  }
+  .zone-btn[aria-pressed='true'] .zone-btn__sw {
+    background: var(--mode);
+  }
+  .zone-btn[aria-pressed='true'] .zone-btn__sw::after {
+    transform: translateX(14px);
+  }
+  .load__head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-weight: 650;
+    font-size: 0.95rem;
+  }
+  .load__head strong {
+    font-size: 1.05rem;
+  }
+  .load__bar {
+    height: 12px;
+    margin: 8px 0 10px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+  .load__bar span {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: var(--mode);
+    transition: width 0.35s ease, background-color 0.35s ease;
+  }
+
+  .house__legend {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+    display: grid;
+    gap: 12px 24px;
+    border-top: 1px solid var(--line);
+    background: var(--white);
+    font-size: 0.95rem;
+  }
+  @media (min-width: 720px) {
+    .house__legend {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .house__legend li {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 10px;
+    align-items: start;
+    line-height: 1.45;
+  }
+  .house__legend-n {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--yellow-400);
+    color: var(--navy-900);
+    font-weight: 800;
+    font-size: 0.8rem;
+    line-height: 1;
+  }
+</style>
+
+<script>
+  const loads = { z1: 67, z2: 33 } as const;
+
+  document.querySelectorAll<HTMLElement>('[data-house]').forEach((house) => {
+    const modeBtns = house.querySelectorAll<HTMLButtonElement>('[data-mode-btn]');
+    const zoneBtns = house.querySelectorAll<HTMLButtonElement>('[data-zone]');
+    const status = house.querySelector<HTMLElement>('[data-house-status]');
+    const loadValue = house.querySelector<HTMLElement>('[data-load-value]');
+    const loadBar = house.querySelector<HTMLElement>('[data-load-bar]');
+
+    const describe = () => {
+      const heat = house.dataset.mode === 'heat';
+      const on = (['z1', 'z2'] as const).filter((z) => house.dataset[z] !== 'off');
+      const load = on.reduce((sum, z) => sum + loads[z], 0);
+      if (loadValue) loadValue.textContent = load ? `${load}%` : 'System off';
+      if (loadBar) loadBar.style.width = `${load}%`;
+      if (status) {
+        const temps = heat ? 'Heating: 7°C outside, 21°C inside.' : 'Cooling: 38°C outside, 24°C inside.';
+        const zoneText = zoneBtns.length ? ` Heat load ${load}%.` : '';
+        status.textContent = temps + zoneText;
+      }
+    };
+
+    modeBtns.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        house.dataset.mode = btn.dataset.modeBtn;
+        modeBtns.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        describe();
+      }),
+    );
+
+    zoneBtns.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const zone = btn.dataset.zone as 'z1' | 'z2';
+        const on = btn.getAttribute('aria-pressed') !== 'true';
+        btn.setAttribute('aria-pressed', String(on));
+        house.dataset[zone] = on ? 'on' : 'off';
+        describe();
+      }),
+    );
+  });
+</script>
