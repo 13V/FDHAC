@@ -80,25 +80,41 @@ The guides themselves are in `src/pages/*.astro` as plain HTML.
 
 ## Quote form
 
-Set `quoteForm.provider` in `src/data/site.ts`:
+Set `quoteForm` in `src/data/site.ts`:
 
 - **`mailto`** (default): works anywhere with no setup. Submitting opens the visitor's email app with the request
   filled in and addressed to `sab@fdha.com.au`.
-- **`netlify`**: if the site is hosted on Netlify, submissions go to the Netlify dashboard and can be emailed to you.
-  No code needed.
-- **`endpoint`**: posts to a form service such as Formspree. Set `quoteForm.endpoint` to the form URL.
+- **`endpoint`**: sends the request straight to your inbox through a form service. No email app is needed on the
+  visitor's side.
+  - [Formspree](https://formspree.io): create a form and set `endpoint` to its URL.
+  - [Web3Forms](https://web3forms.com): set `endpoint: 'https://api.web3forms.com/submit'` and
+    `hiddenFields: { access_key: 'your-key' }`.
 
-I'd recommend switching to `netlify` or `endpoint` before launch so you receive enquiries even when a visitor has no
-email app set up.
+I'd recommend switching to `endpoint` before launch so you get every enquiry, even when a visitor has no email app set
+up.
 
-## Deploying
+## Deploying (Vercel)
 
-The site is static, so it can go anywhere. Netlify is set up already (`netlify.toml`, `public/_redirects`):
+The site is static and deploys to Vercel with no adapter. `vercel.json` handles:
 
-1. Push this repo to GitHub and import it in Netlify. The build command and output folder are picked up automatically.
-2. Point `www.factorydirecthomeair.com.au` at Netlify.
-3. The `_redirects` file sends the old WordPress-era URLs (e.g. `/general-information/maintenance-tips/`) to the new
-   pages with 301s. Cloudflare Pages reads the same file.
+- **Clean URLs:** `/price-list` is served from `price-list.html`, and `/price-list.html` and `/price-list/` redirect to
+  `/price-list`.
+- **301 redirects** from older URLs (for example `/general-information/maintenance-tips`) to the new pages.
+- **Long-lived caching** for the fingerprinted files in `/_astro/`, plus basic security headers.
+
+The Vercel project is connected to this GitHub repo, so **every push deploys automatically**. Pushes to the production
+branch go live, and any other branch gets its own preview URL. The production branch is set under Vercel → Project →
+Settings → Git. It's currently `claude/ecstatic-wright-8v5jzu`, the repo's default branch. If you create a `main`
+branch, switch it there.
+
+To go live on the real domain:
+
+1. In Vercel → Project → Settings → Domains, add `www.factorydirecthomeair.com.au` and `factorydirecthomeair.com.au`.
+   Set the bare domain to redirect to `www`.
+2. At the domain's DNS provider (currently Squarespace), add the records Vercel shows. Change only those A/CNAME
+   records, not the nameservers, so any other records on the domain stay untouched.
+
+Vercel builds with its default Node.js 24, which satisfies the project's `>=22.22.0` requirement.
 
 ## Photos
 
@@ -146,6 +162,7 @@ src/
   layouts/      Base (head, SEO, header/footer) and Article (advice guides)
   pages/        one file per page, same URLs as the current site
   styles/       global.css: design tokens and shared styles
-public/         favicon, share image, robots.txt, _redirects
+public/         favicon, share image, robots.txt
 docs/           screenshots
+vercel.json     clean URLs, redirects and headers for Vercel
 ```

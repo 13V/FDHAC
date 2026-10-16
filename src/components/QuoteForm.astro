@@ -1,9 +1,8 @@
 ---
 /**
  * Quote request form.
- * Delivery is set in src/data/site.ts → quoteForm.provider:
+ * Delivery is set in src/data/site.ts → quoteForm:
  *   mailto   – opens the visitor's email app with the request filled in (default, no setup)
- *   netlify  – Netlify Forms
  *   endpoint – POST to a form service (Formspree, Web3Forms, etc.)
  */
 import Icon from './Icon.astro';
@@ -14,10 +13,9 @@ interface Props {
   compact?: boolean;
 }
 const { id, compact = false } = Astro.props;
-const { provider, endpoint } = site.quoteForm;
-
-const action =
-  provider === 'endpoint' && endpoint ? endpoint : provider === 'netlify' ? '/thank-you' : `mailto:${site.email}`;
+const { endpoint, hiddenFields } = site.quoteForm;
+const provider = site.quoteForm.provider === 'endpoint' && endpoint ? 'endpoint' : 'mailto';
+const action = provider === 'endpoint' ? endpoint : `mailto:${site.email}`;
 
 const needs = ['New ducted system', 'Replace an old ducted system', 'Split system', 'Not sure yet'];
 ---
@@ -28,16 +26,13 @@ const needs = ['New ducted system', 'Replace an old ducted system', 'Split syste
   method="post"
   action={action}
   enctype={provider === 'mailto' ? 'text/plain' : undefined}
-  name={provider === 'netlify' ? 'quote' : undefined}
-  data-netlify={provider === 'netlify' ? 'true' : undefined}
-  netlify-honeypot={provider === 'netlify' ? 'company' : undefined}
   data-quote-form
   data-provider={provider}
   data-email={site.email}
   data-phone={site.phone.display}
   novalidate
 >
-  {provider === 'netlify' && <input type="hidden" name="form-name" value="quote" />}
+  {provider === 'endpoint' && Object.entries(hiddenFields).map(([name, value]) => <input type="hidden" name={name} value={value} />)}
   <p class="qform__hp" aria-hidden="true">
     <label>Leave this empty <input name="company" tabindex="-1" autocomplete="off" /></label>
   </p>
@@ -324,14 +319,7 @@ const needs = ['New ducted system', 'Replace an old ducted system', 'Split syste
       const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
       button?.setAttribute('disabled', '');
       try {
-        const res =
-          provider === 'netlify'
-            ? await fetch('/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
-              })
-            : await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
         if (!res.ok) throw new Error(String(res.status));
         form.reset();
         show(`Thanks, we’ve got your request and will be in touch soon. Need us sooner? Call <a href="${tel}">${phone}</a>.`);

@@ -33,12 +33,14 @@ export const site = {
   /*
    * How the quote form is delivered.
    *  'mailto'   – opens the customer's email app with the request filled in (works anywhere, no setup)
-   *  'netlify'  – Netlify Forms (zero config when the site is hosted on Netlify)
-   *  'endpoint' – POST to a form service such as Formspree; set `endpoint` below
+   *  'endpoint' – POST to a form service such as Formspree or Web3Forms; set `endpoint` below.
+   *               `hiddenFields` are sent with every request (e.g. Web3Forms needs { access_key: '…' }).
+   * If 'endpoint' is chosen but no endpoint is set, the form falls back to 'mailto'.
    */
   quoteForm: {
-    provider: 'mailto' as 'mailto' | 'netlify' | 'endpoint',
+    provider: 'mailto' as 'mailto' | 'endpoint',
     endpoint: '',
+    hiddenFields: {} as Record<string, string>,
   },
 };
 
